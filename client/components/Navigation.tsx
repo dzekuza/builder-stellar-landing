@@ -62,12 +62,12 @@ export function Navigation() {
   };
 
   const navigationItems = [
-    { href: "/dashboard", label: "Dashboard", icon: BarChart3 },
-    { href: "/events", label: "Events", icon: Calendar },
+    { href: "/dashboard", label: t("nav.dashboard"), icon: BarChart3 },
+    { href: "/events", label: t("nav.events"), icon: Calendar },
     ...(user?.role === "COMPANY"
-      ? [{ href: "/team", label: "Team", icon: Users }]
+      ? [{ href: "/team", label: t("nav.team"), icon: Users }]
       : []),
-    { href: "/settings", label: "Settings", icon: Settings },
+    { href: "/settings", label: t("nav.settings"), icon: Settings },
   ];
 
   return (
