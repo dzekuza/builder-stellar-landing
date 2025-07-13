@@ -262,7 +262,7 @@ export function EventsCalendar({
                 variant="outline"
                 size="sm"
                 onClick={goToToday}
-                className="bg-gray-800 border-gray-600 text-white hover:bg-gray-700"
+                className="bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white hover:bg-gray-50 dark:hover:bg-gray-700"
               >
                 Today
               </Button>
