@@ -76,7 +76,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           email: userData.email,
           password: userData.password,
           name: userData.name,
-          role: userData.role?.toUpperCase(),
+          role: userData.role?.toUpperCase() as UserRole,
           phone: userData.phone,
           companyName: userData.companyName,
         }),
