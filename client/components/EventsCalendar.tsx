@@ -9,6 +9,13 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
   ChevronLeft,
   ChevronRight,
   Calendar as CalendarIcon,
@@ -209,9 +216,48 @@ export function EventsCalendar({
         <div className="p-4 border-b border-gray-700">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <h2 className="text-xl font-semibold">
-                {monthNames[month]} {year}
-              </h2>
+              <div className="flex items-center space-x-2">
+                <Select
+                  value={month.toString()}
+                  onValueChange={(value) =>
+                    setCurrentDate(new Date(year, parseInt(value), 1))
+                  }
+                >
+                  <SelectTrigger className="w-[140px] bg-gray-800 border-gray-600 text-white">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {monthNames.map((monthName, index) => (
+                      <SelectItem key={index} value={index.toString()}>
+                        {monthName}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <Select
+                  value={year.toString()}
+                  onValueChange={(value) =>
+                    setCurrentDate(new Date(parseInt(value), month, 1))
+                  }
+                >
+                  <SelectTrigger className="w-[100px] bg-gray-800 border-gray-600 text-white">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {Array.from({ length: 10 }, (_, i) => {
+                      const yearOption = new Date().getFullYear() - 2 + i;
+                      return (
+                        <SelectItem
+                          key={yearOption}
+                          value={yearOption.toString()}
+                        >
+                          {yearOption}
+                        </SelectItem>
+                      );
+                    })}
+                  </SelectContent>
+                </Select>
+              </div>
               <Button
                 variant="outline"
                 size="sm"
