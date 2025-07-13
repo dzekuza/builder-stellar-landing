@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "@/hooks/use-toast";
 import { Layout } from "@/components/Layout";
 import { useAuth } from "@/contexts/AuthContext";
+import { Loading } from "@/components/Loading";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -43,20 +44,34 @@ import {
 interface Event {
   id: string;
   name: string;
-  description: string;
+  description?: string;
   venue: string;
   date: string;
-  time: string;
-  status: "upcoming" | "live" | "completed" | "cancelled";
-  type: "dj" | "barista" | "host" | "company";
-  earnings: number;
-  attendees: number;
-  requests?: number;
-  orders?: number;
-  assignedStaff?: {
-    dj?: string;
-    barista?: string;
-    host?: string;
+  startTime: string;
+  endTime?: string;
+  status: "UPCOMING" | "LIVE" | "COMPLETED" | "CANCELLED";
+  totalEarnings: number;
+  attendeeCount: number;
+  isActive: boolean;
+  owner: {
+    id: string;
+    name: string;
+    email: string;
+    role: string;
+  };
+  staff: Array<{
+    id: string;
+    role: string;
+    user: {
+      id: string;
+      name: string;
+      email: string;
+      role: string;
+    };
+  }>;
+  _count: {
+    songRequests: number;
+    drinkOrders: number;
   };
 }
 
@@ -65,69 +80,45 @@ export default function Events() {
   const navigate = useNavigate();
   const [filter, setFilter] = useState("all");
   const [timeFilter, setTimeFilter] = useState("all");
+  const [events, setEvents] = useState<Event[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  // Mock events data
-  const [events, setEvents] = useState<Event[]>([
-    {
-      id: "1",
-      name: "Saturday Night Vibes",
-      description: "High-energy DJ set for the weekend crowd",
-      venue: "Blue Moon Bar",
-      date: "2023-12-16",
-      time: "21:00",
-      status: "live",
-      type: "dj",
-      earnings: 450,
-      attendees: 120,
-      requests: 25,
-    },
-    {
-      id: "2",
-      name: "Wedding Reception",
-      description: "Elegant wedding celebration",
-      venue: "Grand Hotel Ballroom",
-      date: "2023-12-18",
-      time: "18:00",
-      status: "upcoming",
-      type: "dj",
-      earnings: 0,
-      attendees: 150,
-      requests: 0,
-    },
-    {
-      id: "3",
-      name: "Corporate Coffee Service",
-      description: "Morning coffee service for business meeting",
-      venue: "Tech Hub Conference Center",
-      date: "2023-12-14",
-      time: "08:00",
-      status: "completed",
-      type: "barista",
-      earnings: 280,
-      attendees: 50,
-      orders: 32,
-    },
-    {
-      id: "4",
-      name: "Holiday Party",
-      description: "Company holiday celebration",
-      venue: "Downtown Event Space",
-      date: "2023-12-20",
-      time: "19:00",
-      status: "upcoming",
-      type: "company",
-      earnings: 0,
-      attendees: 200,
-      assignedStaff: {
-        dj: "DJ Alex",
-        barista: "Sarah Coffee",
-        host: "Mike Host",
-      },
-    },
-  ]);
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        const token = localStorage.getItem("eventflow_token");
+        if (!token) {
+          throw new Error("No authentication token found");
+        }
+
+        const response = await fetch("/api/events", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        setEvents(data.events || []);
+      } catch (err) {
+        console.error("Failed to fetch events:", err);
+        setError(err instanceof Error ? err.message : "Failed to load events");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (user) {
+      fetchEvents();
+    }
+  }, [user]);
 
   const getStatusColor = (status: string) => {
-    switch (status) {
+    switch (status.toLowerCase()) {
       case "live":
         return "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400";
       case "upcoming":
@@ -141,8 +132,8 @@ export default function Events() {
     }
   };
 
-  const getTypeIcon = (type: string) => {
-    switch (type) {
+  const getTypeIcon = (role: string) => {
+    switch (role.toLowerCase()) {
       case "dj":
         return Music;
       case "barista":
