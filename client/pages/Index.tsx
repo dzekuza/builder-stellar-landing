@@ -182,7 +182,7 @@ export default function Index() {
                 return (
                   <Card
                     key={index}
-                    className="group hover:shadow-xl transition-all duration-300 border-0 bg-white/80 backdrop-blur-sm hover:-translate-y-2"
+                    className="group hover:shadow-xl transition-all duration-300 border-0 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm hover:-translate-y-2 hover:shadow-brand-purple/10"
                   >
                     <CardHeader className="text-center pb-4">
                       <div
