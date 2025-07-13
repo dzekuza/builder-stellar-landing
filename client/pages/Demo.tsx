@@ -51,21 +51,50 @@ export default function Demo() {
   ];
 
   const handleDemoLogin = async (demoUser: (typeof demoUsers)[0]) => {
-    // Override the auth context to set demo user data
-    localStorage.setItem(
-      "eventflow_user",
-      JSON.stringify({
-        id: `demo-${demoUser.role}`,
-        email: demoUser.email,
-        name: demoUser.name,
-        role: demoUser.role,
-        phone: "+1 (555) 123-4567",
-        companyName: demoUser.role === "company" ? "EventCorp" : undefined,
-      }),
-    );
+    try {
+      // First try to login with existing demo user
+      const defaultPassword = "demo123";
 
-    // Reload to trigger auth context update
-    window.location.href = "/dashboard";
+      try {
+        await login(demoUser.email, defaultPassword);
+        navigate("/dashboard");
+        return;
+      } catch (loginError) {
+        // If login fails, user doesn't exist, so create them
+        console.log("Demo user doesn't exist, creating...");
+      }
+
+      // Create demo user via registration
+      const response = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: demoUser.email,
+          password: defaultPassword,
+          name: demoUser.name,
+          role: demoUser.role.toUpperCase(),
+          phone: "+1 (555) 123-4567",
+          companyName: demoUser.role === "company" ? "EventCorp" : undefined,
+        }),
+      });
+
+      if (response.ok) {
+        const { user, token } = await response.json();
+        localStorage.setItem("eventflow_token", token);
+        localStorage.setItem("eventflow_user", JSON.stringify(user));
+        navigate("/dashboard");
+      } else {
+        // User might already exist but login failed for another reason
+        // Try login again
+        await login(demoUser.email, defaultPassword);
+        navigate("/dashboard");
+      }
+    } catch (error) {
+      console.error("Demo login failed:", error);
+      alert("Demo login failed. Please try again.");
+    }
   };
 
   return (
