@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import { Layout } from "@/components/Layout";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
@@ -32,9 +33,19 @@ import {
 
 export default function QRGenerator() {
   const { user } = useAuth();
+  const [searchParams] = useSearchParams();
   const [selectedEvent, setSelectedEvent] = useState("");
   const [qrGenerated, setQrGenerated] = useState(false);
   const [copied, setCopied] = useState(false);
+
+  // Check for pre-selected event from URL parameters
+  useEffect(() => {
+    const eventParam = searchParams.get("event");
+    if (eventParam) {
+      setSelectedEvent(eventParam);
+      setQrGenerated(true);
+    }
+  }, [searchParams]);
 
   // Mock events data
   const mockEvents = [
