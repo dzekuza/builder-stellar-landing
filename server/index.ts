@@ -17,6 +17,11 @@ import {
 } from "./routes/songs";
 import { getDashboardStats, getAnalytics } from "./routes/analytics";
 import { sendTestEmail } from "./routes/test-email";
+import {
+  getTeamMembers,
+  inviteTeamMember,
+  removeTeamMember,
+} from "./routes/team";
 
 export function createServer() {
   const app = express();
