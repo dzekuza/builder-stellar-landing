@@ -4,7 +4,10 @@ import { sendEmail, emailTemplates } from "../lib/email";
 import { AuthenticatedRequest } from "../lib/auth";
 
 // Get team members for a company
-export const getTeamMembers = async (req: Request, res: Response) => {
+export const getTeamMembers = async (
+  req: AuthenticatedRequest,
+  res: Response,
+) => {
   try {
     const userId = req.user?.id;
     const userRole = req.user?.role;
