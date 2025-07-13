@@ -155,13 +155,18 @@ export default function Register() {
                         >
                           <Icon className="w-8 h-8" />
                         </div>
-                        <h3 className="text-xl font-semibold mb-2">
+                        <h3 className="text-xl font-semibold mb-2 text-gray-900 dark:text-white">
                           {role.title}
                         </h3>
-                        <p className="text-gray-600 mb-4">{role.description}</p>
+                        <p className="text-gray-600 dark:text-gray-300 mb-4">
+                          {role.description}
+                        </p>
                         <ul className="text-sm space-y-1">
                           {role.features.map((feature, index) => (
-                            <li key={index} className="text-gray-500">
+                            <li
+                              key={index}
+                              className="text-gray-500 dark:text-gray-400"
+                            >
                               • {feature}
                             </li>
                           ))}
