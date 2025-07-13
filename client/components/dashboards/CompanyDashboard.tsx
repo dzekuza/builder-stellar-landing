@@ -116,35 +116,7 @@ export function CompanyDashboard({ userName }: { userName: string }) {
 
   const activeEvents = dashboardData?.upcomingEvents?.slice(0, 2) || [];
 
-  const teamMembers = [
-    {
-      id: 1,
-      name: "DJ Alex",
-      role: "dj",
-      events: 5,
-      revenue: "$3,250",
-      rating: 4.9,
-      status: "active",
-    },
-    {
-      id: 2,
-      name: "Sarah Barista",
-      role: "barista",
-      events: 8,
-      revenue: "$2,100",
-      rating: 4.8,
-      status: "active",
-    },
-    {
-      id: 3,
-      name: "Mike Host",
-      role: "host",
-      events: 6,
-      revenue: "$1,800",
-      rating: 4.7,
-      status: "active",
-    },
-  ];
+  const teamMembers = []; // Will be populated with real team data once team management API is implemented
 
   const getRoleIcon = (role: string) => {
     switch (role) {
