@@ -292,8 +292,8 @@ export default function Events() {
                 onClick={() => setViewMode("list")}
                 className={
                   viewMode === "list"
-                    ? "bg-white dark:bg-gray-700 shadow-sm"
-                    : ""
+                    ? "bg-white dark:bg-gray-700 shadow-sm text-gray-900 dark:text-white"
+                    : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
                 }
               >
                 <List className="w-4 h-4 mr-2" />
@@ -305,8 +305,8 @@ export default function Events() {
                 onClick={() => setViewMode("calendar")}
                 className={
                   viewMode === "calendar"
-                    ? "bg-white dark:bg-gray-700 shadow-sm"
-                    : ""
+                    ? "bg-white dark:bg-gray-700 shadow-sm text-gray-900 dark:text-white"
+                    : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
                 }
               >
                 <CalendarDays className="w-4 h-4 mr-2" />
