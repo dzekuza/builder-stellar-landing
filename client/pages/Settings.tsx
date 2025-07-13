@@ -492,7 +492,7 @@ export default function Settings() {
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
-                {user?.role === "dj" && (
+                {user?.role === "DJ" && (
                   <div className="space-y-2">
                     <Label htmlFor="defaultPrice">
                       Default Song Request Price
