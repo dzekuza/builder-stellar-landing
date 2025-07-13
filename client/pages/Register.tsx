@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth, UserRole } from "@/contexts/AuthContext";
 import { Layout } from "@/components/Layout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -16,7 +17,7 @@ import { Music, Coffee, Users, Building2, ArrowRight } from "lucide-react";
 
 export default function Register() {
   const [step, setStep] = useState<"role" | "details">("role");
-  const [selectedRole, setSelectedRole] = useState<string>("");
+  const [selectedRole, setSelectedRole] = useState<UserRole | "">("");
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -25,6 +26,10 @@ export default function Register() {
     phone: "",
     companyName: "",
   });
+  const [error, setError] = useState("");
+
+  const { register: registerUser, loading } = useAuth();
+  const navigate = useNavigate();
 
   const roles = [
     {
@@ -62,7 +67,8 @@ export default function Register() {
   ];
 
   const handleRoleSelect = (role: string) => {
-    setSelectedRole(role);
+    setSelectedRole(role as UserRole);
+    setError("");
   };
 
   const handleRoleNext = () => {
@@ -76,12 +82,31 @@ export default function Register() {
       ...formData,
       [e.target.name]: e.target.value,
     });
+    setError("");
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle registration logic here
-    console.log("Registration data:", { ...formData, role: selectedRole });
+
+    if (formData.password !== formData.confirmPassword) {
+      setError("Passwords do not match");
+      return;
+    }
+
+    if (formData.password.length < 6) {
+      setError("Password must be at least 6 characters");
+      return;
+    }
+
+    try {
+      await registerUser({
+        ...formData,
+        role: selectedRole as UserRole,
+      });
+      navigate("/dashboard");
+    } catch (err) {
+      setError("Registration failed. Please try again.");
+    }
   };
 
   if (step === "role") {
@@ -264,8 +289,19 @@ export default function Register() {
                 />
               </div>
 
-              <Button type="submit" className="w-full" size="lg">
-                Create Account
+              {error && (
+                <div className="text-sm text-red-600 bg-red-50 p-3 rounded-md">
+                  {error}
+                </div>
+              )}
+
+              <Button
+                type="submit"
+                className="w-full"
+                size="lg"
+                disabled={loading}
+              >
+                {loading ? "Creating Account..." : "Create Account"}
               </Button>
             </form>
 
