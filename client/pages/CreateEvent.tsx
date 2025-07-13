@@ -194,7 +194,7 @@ export default function CreateEvent() {
                 Create New Event
               </h1>
               <p className="text-gray-600">
-                Set up your {user?.role === "company" ? "team's" : ""} event
+                Set up your {user?.role === "COMPANY" ? "team's" : ""} event
                 details
               </p>
             </div>
