@@ -162,8 +162,33 @@ export default function Events() {
     }
   };
 
+  if (loading) {
+    return (
+      <Layout>
+        <Loading />
+      </Layout>
+    );
+  }
+
+  if (error) {
+    return (
+      <Layout>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="text-center">
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+              Error Loading Events
+            </h2>
+            <p className="text-gray-600 dark:text-gray-400 mb-4">{error}</p>
+            <Button onClick={() => window.location.reload()}>Try Again</Button>
+          </div>
+        </div>
+      </Layout>
+    );
+  }
+
   const filteredEvents = events.filter((event) => {
-    if (filter !== "all" && event.status !== filter) return false;
+    if (filter !== "all" && event.status.toLowerCase() !== filter.toLowerCase())
+      return false;
     if (timeFilter !== "all") {
       const eventDate = new Date(event.date);
       const now = new Date();
@@ -186,10 +211,13 @@ export default function Events() {
     return true;
   });
 
-  const upcomingEvents = events.filter((e) => e.status === "upcoming").length;
-  const liveEvents = events.filter((e) => e.status === "live").length;
-  const completedEvents = events.filter((e) => e.status === "completed").length;
-  const totalEarnings = events.reduce((acc, event) => acc + event.earnings, 0);
+  const upcomingEvents = events.filter((e) => e.status === "UPCOMING").length;
+  const liveEvents = events.filter((e) => e.status === "LIVE").length;
+  const completedEvents = events.filter((e) => e.status === "COMPLETED").length;
+  const totalEarnings = events.reduce(
+    (acc, event) => acc + event.totalEarnings,
+    0,
+  );
 
   const handleViewLive = (eventId: string) => {
     // Navigate to live event view
@@ -206,7 +234,7 @@ export default function Events() {
     navigate(`/events/${eventId}/edit`);
   };
 
-  const handleDeleteEvent = (eventId: string) => {
+  const handleDeleteEvent = async (eventId: string) => {
     // Show confirmation and delete event
     const eventToDelete = events.find((e) => e.id === eventId);
     if (
@@ -214,11 +242,32 @@ export default function Events() {
         `Are you sure you want to delete "${eventToDelete?.name}"? This action cannot be undone.`,
       )
     ) {
-      setEvents(events.filter((event) => event.id !== eventId));
-      toast({
-        title: "Event Deleted",
-        description: `"${eventToDelete?.name}" has been successfully deleted.`,
-      });
+      try {
+        const token = localStorage.getItem("eventflow_token");
+        const response = await fetch(`/api/events/${eventId}`, {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (response.ok) {
+          setEvents(events.filter((event) => event.id !== eventId));
+          toast({
+            title: "Event Deleted",
+            description: `"${eventToDelete?.name}" has been successfully deleted.`,
+          });
+        } else {
+          throw new Error("Failed to delete event");
+        }
+      } catch (err) {
+        console.error("Error deleting event:", err);
+        toast({
+          title: "Error",
+          description: "Failed to delete event. Please try again.",
+          variant: "destructive",
+        });
+      }
     }
   };
 
