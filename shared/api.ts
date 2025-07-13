@@ -39,6 +39,9 @@ export interface Event {
   startTime: string;
   endTime?: string;
   status: string;
+  totalEarnings: number;
+  attendeeCount: number;
+  isActive: boolean;
 }
 
 export interface DashboardResponse {
