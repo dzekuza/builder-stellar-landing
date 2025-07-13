@@ -9,6 +9,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import Index from "./pages/Index";
+import Demo from "./pages/Demo";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
@@ -48,6 +49,14 @@ const App = () => (
               element={
                 <ProtectedRoute requireAuth={false}>
                   <Register />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/demo"
+              element={
+                <ProtectedRoute requireAuth={false}>
+                  <Demo />
                 </ProtectedRoute>
               }
             />
