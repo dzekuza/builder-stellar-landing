@@ -166,6 +166,17 @@ function toast({ ...props }: Toast) {
 }
 
 function useToast() {
+  // Safety check to ensure React hooks are available
+  if (typeof useState !== "function") {
+    console.error("React hooks not available in useToast");
+    return {
+      toasts: [],
+      toast,
+      dismiss: (toastId?: string) =>
+        dispatch({ type: "DISMISS_TOAST", toastId }),
+    };
+  }
+
   const [state, setState] = useState<State>(memoryState);
 
   useEffect(() => {
