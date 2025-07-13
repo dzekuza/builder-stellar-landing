@@ -166,13 +166,13 @@ export default function CreateEvent() {
 
   const getRoleIcon = () => {
     switch (user?.role) {
-      case "dj":
+      case "DJ":
         return Music;
-      case "barista":
+      case "BARISTA":
         return Coffee;
-      case "host":
+      case "HOST":
         return Users;
-      case "company":
+      case "COMPANY":
         return Building2;
       default:
         return Calendar;
