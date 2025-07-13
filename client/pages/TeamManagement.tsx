@@ -71,7 +71,7 @@ export default function TeamManagement() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const [isInviteOpen, setIsInviteOpen] = useState(false);
+    const [isInviteOpen, setIsInviteOpen] = useState(false);
   const [inviteData, setInviteData] = useState({
     email: "",
     role: "",
@@ -101,9 +101,7 @@ export default function TeamManagement() {
         setTeamMembers(data.members || []);
       } catch (err) {
         console.error("Failed to fetch team members:", err);
-        setError(
-          err instanceof Error ? err.message : "Failed to load team members",
-        );
+        setError(err instanceof Error ? err.message : "Failed to load team members");
         // For now, set empty array to show empty state instead of error
         setTeamMembers([]);
       } finally {
@@ -158,7 +156,7 @@ export default function TeamManagement() {
     }
   };
 
-  const handleInvite = async () => {
+    const handleInvite = async () => {
     if (!inviteData.email || !inviteData.role) {
       toast({
         title: "Missing Information",
@@ -204,10 +202,7 @@ export default function TeamManagement() {
       console.error("Failed to send invitation:", error);
       toast({
         title: "Error",
-        description:
-          error instanceof Error
-            ? error.message
-            : "Failed to send invitation. Please try again.",
+        description: error instanceof Error ? error.message : "Failed to send invitation. Please try again.",
         variant: "destructive",
       });
     } finally {
@@ -215,15 +210,11 @@ export default function TeamManagement() {
     }
   };
 
-  const handleDeleteMember = async (id: string) => {
-    const memberToDelete = teamMembers.find((m) => m.id === id);
+    const handleDeleteMember = async (id: string) => {
+    const memberToDelete = teamMembers.find(m => m.id === id);
     if (!memberToDelete) return;
 
-    if (
-      !window.confirm(
-        `Are you sure you want to remove ${memberToDelete.name} from your team? This action cannot be undone.`,
-      )
-    ) {
+    if (!window.confirm(`Are you sure you want to remove ${memberToDelete.name} from your team? This action cannot be undone.`)) {
       return;
     }
 
@@ -259,7 +250,7 @@ export default function TeamManagement() {
     }
   };
 
-  const activeMembers = teamMembers.filter((m) => m.status === "active");
+    const activeMembers = teamMembers.filter((m) => m.status === "active");
   const pendingMembers = teamMembers.filter((m) => m.status === "pending");
 
   if (loading) {
@@ -276,15 +267,11 @@ export default function TeamManagement() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="text-center">
             <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
-              {error.includes("Access denied")
-                ? "Access Denied"
-                : "Error Loading Team"}
+              {error.includes("Access denied") ? "Access Denied" : "Error Loading Team"}
             </h2>
             <p className="text-gray-600 dark:text-gray-400 mb-4">{error}</p>
             {!error.includes("Access denied") && (
-              <Button onClick={() => window.location.reload()}>
-                Try Again
-              </Button>
+              <Button onClick={() => window.location.reload()}>Try Again</Button>
             )}
           </div>
         </div>
@@ -374,7 +361,7 @@ export default function TeamManagement() {
                   >
                     Cancel
                   </Button>
-                  <Button onClick={handleInvite} disabled={isInviting}>
+                                    <Button onClick={handleInvite} disabled={isInviting}>
                     <Send className="w-4 h-4 mr-2" />
                     {isInviting ? "Sending..." : "Send Invitation"}
                   </Button>
@@ -454,9 +441,31 @@ export default function TeamManagement() {
           </Card>
         </div>
 
-        {/* Team Members Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {teamMembers.map((member) => {
+                {/* Team Members Grid */}
+        {teamMembers.length === 0 ? (
+          <div className="text-center py-12">
+            <Card className="max-w-md mx-auto">
+              <CardContent className="pt-6">
+                <Users className="mx-auto h-12 w-12 text-gray-400 mb-4" />
+                <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
+                  No team members yet
+                </h3>
+                <p className="text-gray-500 dark:text-gray-400 mb-6 max-w-md mx-auto">
+                  Start building your team by inviting DJs, baristas, and hosts to join your events.
+                </p>
+                <Button
+                  onClick={() => setIsInviteOpen(true)}
+                  className="bg-gradient-to-r from-brand-purple to-brand-blue text-white px-6 py-3"
+                >
+                  <Plus className="w-4 h-4 mr-2" />
+                  Invite Your First Member
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {teamMembers.map((member) => {
             const RoleIcon = getRoleIcon(member.role);
             return (
               <Card key={member.id}>
