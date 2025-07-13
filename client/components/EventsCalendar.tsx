@@ -317,10 +317,10 @@ export function EventsCalendar({
                 <span
                   className={`text-sm font-medium ${
                     calendarDay.isToday
-                      ? "text-white"
+                      ? "text-gray-900 dark:text-white"
                       : calendarDay.isCurrentMonth
-                        ? "text-gray-300"
-                        : "text-gray-500"
+                        ? "text-gray-900 dark:text-gray-300"
+                        : "text-gray-400 dark:text-gray-500"
                   }`}
                 >
                   {calendarDay.day}
