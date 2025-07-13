@@ -139,10 +139,10 @@ export default function Dashboard() {
         <div className="mb-8">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
                 Welcome back, {user.name}! {user.role === "dj" ? "🎵" : "🎉"}
               </h1>
-              <p className="text-gray-600 mt-1">
+              <p className="text-gray-600 dark:text-gray-400 mt-1">
                 Here's what's happening with your events today
               </p>
             </div>
@@ -164,17 +164,17 @@ export default function Dashboard() {
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm font-medium text-gray-600">
+                      <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
                         {stat.title}
                       </p>
-                      <p className="text-2xl font-bold text-gray-900">
+                      <p className="text-2xl font-bold text-gray-900 dark:text-white">
                         {stat.value}
                       </p>
                       <p className={`text-sm ${stat.color} font-medium`}>
                         {stat.change}
                       </p>
                     </div>
-                    <div className="h-12 w-12 bg-gray-100 rounded-lg flex items-center justify-center">
+                    <div className="h-12 w-12 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center">
                       <Icon className={`h-6 w-6 ${stat.color}`} />
                     </div>
                   </div>
@@ -209,7 +209,7 @@ export default function Dashboard() {
                 {recentRequests.map((request) => (
                   <div
                     key={request.id}
-                    className="flex items-center justify-between p-4 rounded-lg border bg-gray-50/50"
+                    className="flex items-center justify-between p-4 rounded-lg border bg-gray-50/50 dark:bg-gray-800/50 dark:border-gray-700"
                   >
                     <div className="flex items-center space-x-3">
                       <Avatar className="h-10 w-10">
@@ -219,13 +219,15 @@ export default function Dashboard() {
                         </AvatarFallback>
                       </Avatar>
                       <div>
-                        <p className="font-medium text-gray-900">
+                        <p className="font-medium text-gray-900 dark:text-white">
                           {request.song}
                         </p>
-                        <p className="text-sm text-gray-600">
+                        <p className="text-sm text-gray-600 dark:text-gray-400">
                           {request.artist} • {request.requester}
                         </p>
-                        <p className="text-xs text-gray-500">{request.time}</p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">
+                          {request.time}
+                        </p>
                       </div>
                     </div>
                     <div className="flex items-center space-x-2">
@@ -275,16 +277,18 @@ export default function Dashboard() {
                     className="p-4 rounded-lg border bg-gray-50/50"
                   >
                     <div className="flex items-center justify-between mb-2">
-                      <h3 className="font-medium text-gray-900">
+                      <h3 className="font-medium text-gray-900 dark:text-white">
                         {event.name}
                       </h3>
                       <Badge className="bg-green-100 text-green-800">
                         {event.status}
                       </Badge>
                     </div>
-                    <p className="text-sm text-gray-600">{event.venue}</p>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                      {event.venue}
+                    </p>
                     <div className="flex items-center justify-between mt-3">
-                      <div className="flex items-center space-x-4 text-sm text-gray-500">
+                      <div className="flex items-center space-x-4 text-sm text-gray-500 dark:text-gray-400">
                         <span className="flex items-center">
                           <Calendar className="w-4 h-4 mr-1" />
                           {event.date}
@@ -326,7 +330,7 @@ export default function Dashboard() {
                 >
                   <Plus className="w-6 h-6 mb-2" />
                   <span className="font-medium">Create New Event</span>
-                  <span className="text-xs text-gray-500">
+                  <span className="text-xs text-gray-500 dark:text-gray-400">
                     Set up a new gig with song requests
                   </span>
                 </Button>
@@ -338,7 +342,7 @@ export default function Dashboard() {
                 >
                   <QrCode className="w-6 h-6 mb-2" />
                   <span className="font-medium">Generate QR Code</span>
-                  <span className="text-xs text-gray-500">
+                  <span className="text-xs text-gray-500 dark:text-gray-400">
                     Quick access for song requests
                   </span>
                 </Button>
@@ -350,7 +354,7 @@ export default function Dashboard() {
                 >
                   <TrendingUp className="w-6 h-6 mb-2" />
                   <span className="font-medium">View Analytics</span>
-                  <span className="text-xs text-gray-500">
+                  <span className="text-xs text-gray-500 dark:text-gray-400">
                     Track your performance and earnings
                   </span>
                 </Button>
