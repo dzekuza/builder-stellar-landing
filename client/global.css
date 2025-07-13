@@ -64,50 +64,50 @@
     --background: 224 71% 4%;
     --foreground: 210 20% 98%;
 
-    --card: 224 71% 4%;
+    --card: 215 28% 8%;
     --card-foreground: 210 20% 98%;
 
-    --popover: 224 71% 4%;
+    --popover: 215 28% 8%;
     --popover-foreground: 210 20% 98%;
 
     --primary: 262 83% 58%;
     --primary-foreground: 210 20% 98%;
 
-    --secondary: 215 28% 17%;
+    --secondary: 215 28% 12%;
     --secondary-foreground: 210 20% 98%;
 
-    --muted: 215 28% 17%;
+    --muted: 215 28% 12%;
     --muted-foreground: 217 10% 65%;
 
-    --accent: 215 28% 17%;
+    --accent: 215 28% 12%;
     --accent-foreground: 210 20% 98%;
 
     --destructive: 0 63% 31%;
     --destructive-foreground: 210 20% 98%;
 
     --border: 215 28% 17%;
-    --input: 215 28% 17%;
+    --input: 215 28% 12%;
     --ring: 262 83% 58%;
 
     --sidebar-background: 224 71% 4%;
     --sidebar-foreground: 210 20% 98%;
     --sidebar-primary: 262 83% 58%;
     --sidebar-primary-foreground: 210 20% 98%;
-    --sidebar-accent: 215 28% 17%;
+    --sidebar-accent: 215 28% 12%;
     --sidebar-accent-foreground: 210 20% 98%;
     --sidebar-border: 215 28% 17%;
     --sidebar-ring: 262 83% 58%;
 
     /* EventFlow Brand Colors - Dark Mode */
-    --brand-purple: 262 83% 58%;
-    --brand-purple-dark: 262 83% 48%;
-    --brand-purple-light: 262 83% 68%;
-    --brand-blue: 217 91% 60%;
-    --brand-blue-dark: 217 91% 50%;
-    --brand-blue-light: 217 91% 70%;
-    --brand-success: 142 76% 36%;
-    --brand-warning: 38 92% 50%;
-    --brand-error: 0 84% 60%;
+    --brand-purple: 262 83% 68%;
+    --brand-purple-dark: 262 83% 58%;
+    --brand-purple-light: 262 83% 78%;
+    --brand-blue: 217 91% 70%;
+    --brand-blue-dark: 217 91% 60%;
+    --brand-blue-light: 217 91% 80%;
+    --brand-success: 142 76% 46%;
+    --brand-warning: 38 92% 60%;
+    --brand-error: 0 84% 70%;
   }
 }
 
