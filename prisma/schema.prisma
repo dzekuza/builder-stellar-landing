@@ -1,0 +1,170 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          String   @id @default(cuid())
+  email       String   @unique
+  password    String
+  name        String
+  role        UserRole
+  phone       String?
+  companyName String?
+  avatar      String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  ownedEvents   Event[]       @relation("EventOwner")
+  assignedEvents EventStaff[]
+  songRequests  SongRequest[]
+  drinkOrders   DrinkOrder[]
+  
+  @@map("users")
+}
+
+model Event {
+  id          String      @id @default(cuid())
+  name        String
+  venue       String
+  date        DateTime
+  startTime   DateTime
+  endTime     DateTime?
+  description String?
+  status      EventStatus @default(UPCOMING)
+  qrCode      String?
+  totalEarnings Float     @default(0)
+  attendeeCount Int       @default(0)
+  isActive    Boolean     @default(false)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  // Relations
+  ownerId      String
+  owner        User           @relation("EventOwner", fields: [ownerId], references: [id])
+  staff        EventStaff[]
+  songRequests SongRequest[]
+  drinkOrders  DrinkOrder[]
+  drinks       EventDrink[]
+
+  @@map("events")
+}
+
+model EventStaff {
+  id      String @id @default(cuid())
+  eventId String
+  userId  String
+  role    UserRole
+
+  event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  user  User  @relation(fields: [userId], references: [id])
+
+  @@unique([eventId, userId])
+  @@map("event_staff")
+}
+
+model SongRequest {
+  id        String            @id @default(cuid())
+  song      String
+  artist    String
+  amount    Float
+  status    SongRequestStatus @default(PENDING)
+  playedAt  DateTime?
+  createdAt DateTime          @default(now())
+
+  // Relations
+  eventId     String
+  requesterId String
+  event       Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  requester   User  @relation(fields: [requesterId], references: [id])
+
+  @@map("song_requests")
+}
+
+model Drink {
+  id          String  @id @default(cuid())
+  name        String
+  description String?
+  price       Float
+  category    String
+  ingredients String[]
+  image       String?
+  isActive    Boolean @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  eventDrinks EventDrink[]
+  orders      DrinkOrder[]
+
+  @@map("drinks")
+}
+
+model EventDrink {
+  id      String @id @default(cuid())
+  eventId String
+  drinkId String
+  price   Float
+
+  event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  drink Drink @relation(fields: [drinkId], references: [id])
+
+  @@unique([eventId, drinkId])
+  @@map("event_drinks")
+}
+
+model DrinkOrder {
+  id         String           @id @default(cuid())
+  quantity   Int
+  totalPrice Float
+  status     DrinkOrderStatus @default(PENDING)
+  completedAt DateTime?
+  createdAt  DateTime         @default(now())
+
+  // Relations
+  eventId    String
+  drinkId    String
+  customerId String
+  event      Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  drink      Drink @relation(fields: [drinkId], references: [id])
+  customer   User  @relation(fields: [customerId], references: [id])
+
+  @@map("drink_orders")
+}
+
+enum UserRole {
+  DJ
+  BARISTA
+  HOST
+  COMPANY
+}
+
+enum EventStatus {
+  UPCOMING
+  LIVE
+  COMPLETED
+  CANCELLED
+}
+
+enum SongRequestStatus {
+  PENDING
+  PLAYING
+  PLAYED
+  DECLINED
+}
+
+enum DrinkOrderStatus {
+  PENDING
+  PREPARING
+  READY
+  COMPLETED
+  CANCELLED
+}
