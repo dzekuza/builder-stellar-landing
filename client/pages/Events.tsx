@@ -354,7 +354,7 @@ export default function Events() {
             return (
               <Card
                 key={event.id}
-                className="hover:shadow-lg transition-all duration-300 border-0 bg-white/80 backdrop-blur-sm hover:-translate-y-1 group"
+                className="hover:shadow-lg transition-all duration-300 border-0 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm hover:-translate-y-1 group"
               >
                 <CardContent className="p-0">
                   {/* Header Section */}
@@ -370,7 +370,7 @@ export default function Events() {
                         </div>
                         <div className="flex-1">
                           <div className="flex items-center space-x-2 mb-1">
-                            <h3 className="text-lg font-bold text-gray-900 group-hover:text-brand-purple transition-colors">
+                            <h3 className="text-lg font-bold text-gray-900 dark:text-white group-hover:text-brand-purple transition-colors">
                               {event.name}
                             </h3>
                             <Badge
@@ -382,7 +382,7 @@ export default function Events() {
                               {event.status.toUpperCase()}
                             </Badge>
                           </div>
-                          <p className="text-sm text-gray-600 leading-relaxed">
+                          <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
                             {event.description}
                           </p>
                         </div>
@@ -391,19 +391,19 @@ export default function Events() {
 
                     {/* Event Details */}
                     <div className="grid grid-cols-1 gap-2 mb-4">
-                      <div className="flex items-center space-x-2 text-sm text-gray-600">
-                        <MapPin className="w-4 h-4 text-gray-400" />
+                      <div className="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-400">
+                        <MapPin className="w-4 h-4 text-gray-400 dark:text-gray-500" />
                         <span className="font-medium">{event.venue}</span>
                       </div>
-                      <div className="flex items-center space-x-4 text-sm text-gray-600">
+                      <div className="flex items-center space-x-4 text-sm text-gray-600 dark:text-gray-400">
                         <div className="flex items-center space-x-2">
-                          <Calendar className="w-4 h-4 text-gray-400" />
+                          <Calendar className="w-4 h-4 text-gray-400 dark:text-gray-500" />
                           <span>
                             {new Date(event.date).toLocaleDateString()}
                           </span>
                         </div>
                         <div className="flex items-center space-x-2">
-                          <Clock className="w-4 h-4 text-gray-400" />
+                          <Clock className="w-4 h-4 text-gray-400 dark:text-gray-500" />
                           <span>{event.time}</span>
                         </div>
                       </div>
