@@ -274,7 +274,7 @@ export default function CreateEvent() {
             </Card>
 
             {/* Role-specific settings */}
-            {user?.role === "dj" && (
+            {user?.role === "DJ" && (
               <Card>
                 <CardHeader>
                   <CardTitle>DJ Settings</CardTitle>
@@ -469,7 +469,7 @@ export default function CreateEvent() {
 
                 <Separator />
 
-                {user?.role === "dj" && (
+                {user?.role === "DJ" && (
                   <div className="space-y-1">
                     <p className="text-sm font-medium">Song Requests:</p>
                     <Badge
