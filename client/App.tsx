@@ -17,6 +17,10 @@ import Dashboard from "./pages/Dashboard";
 import Events from "./pages/Events";
 import Team from "./pages/Team";
 import Settings from "./pages/Settings";
+import MenuManagement from "./pages/MenuManagement";
+import CreateEvent from "./pages/CreateEvent";
+import Analytics from "./pages/Analytics";
+import QRGenerator from "./pages/QRGenerator";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -92,6 +96,38 @@ function AppRoutes() {
           element={
             <ProtectedRoute>
               <Settings />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/menu"
+          element={
+            <ProtectedRoute>
+              <MenuManagement />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/create-event"
+          element={
+            <ProtectedRoute>
+              <CreateEvent />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/analytics"
+          element={
+            <ProtectedRoute>
+              <Analytics />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/qr-generator"
+          element={
+            <ProtectedRoute>
+              <QRGenerator />
             </ProtectedRoute>
           }
         />
