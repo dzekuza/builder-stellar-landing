@@ -2,6 +2,7 @@ import { RequestHandler } from "express";
 import { z } from "zod";
 import { prisma } from "../lib/prisma";
 import { AuthenticatedRequest } from "../lib/auth";
+import { sendEmail, emailTemplates } from "../lib/email";
 
 const createEventSchema = z.object({
   name: z.string().min(1),
@@ -78,7 +79,9 @@ export const createEvent: RequestHandler = async (req, res) => {
 
     const event = await prisma.event.create({
       data: {
-        ...eventData,
+        name: eventData.name,
+        venue: eventData.venue,
+        description: eventData.description,
         date: new Date(eventData.date),
         startTime: new Date(eventData.startTime),
         endTime: eventData.endTime ? new Date(eventData.endTime) : null,
@@ -107,6 +110,25 @@ export const createEvent: RequestHandler = async (req, res) => {
         },
       },
     });
+
+    // Send email notification
+    try {
+      const emailTemplate = emailTemplates.eventCreated(
+        event.name,
+        new Date(event.date).toLocaleDateString(),
+        event.venue,
+      );
+
+      await sendEmail({
+        to: user.email,
+        subject: emailTemplate.subject,
+        html: emailTemplate.html,
+        text: emailTemplate.text,
+      });
+    } catch (emailError) {
+      console.error("Failed to send event creation email:", emailError);
+      // Don't fail the request if email fails
+    }
 
     res.status(201).json({ event });
   } catch (error) {

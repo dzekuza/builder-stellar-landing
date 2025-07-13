@@ -112,7 +112,7 @@ export default function Index() {
                 EventFlow
               </h1>
 
-              <p className="text-xl md:text-2xl text-gray-600 mb-8 leading-relaxed">
+              <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 mb-8 leading-relaxed">
                 The all-in-one platform for DJs, Baristas, Event Hosts, and
                 Companies to manage events seamlessly
               </p>
@@ -169,7 +169,7 @@ export default function Index() {
               <h2 className="text-3xl md:text-5xl font-bold mb-6">
                 Built for Every Role
               </h2>
-              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
                 Whether you're a DJ taking song requests, a barista managing
                 orders, or running an event company, EventFlow adapts to your
                 needs.
@@ -182,7 +182,7 @@ export default function Index() {
                 return (
                   <Card
                     key={index}
-                    className="group hover:shadow-xl transition-all duration-300 border-0 bg-white/80 backdrop-blur-sm hover:-translate-y-2"
+                    className="group hover:shadow-xl transition-all duration-300 border-0 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm hover:-translate-y-2 hover:shadow-brand-purple/10"
                   >
                     <CardHeader className="text-center pb-4">
                       <div
@@ -222,7 +222,7 @@ export default function Index() {
               <h2 className="text-3xl md:text-5xl font-bold mb-6">
                 Powerful Features
               </h2>
-              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
                 Everything you need to run successful events, all in one
                 platform.
               </p>
@@ -239,7 +239,7 @@ export default function Index() {
                     <h3 className="text-xl font-semibold mb-4">
                       {feature.title}
                     </h3>
-                    <p className="text-gray-600 leading-relaxed">
+                    <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
                       {feature.description}
                     </p>
                   </div>

@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -21,33 +22,92 @@ import {
   CheckCircle,
   Package,
 } from "lucide-react";
+import { Loading } from "@/components/Loading";
+import { DashboardResponse } from "@shared/api";
 
 export function BaristaDashboard({ userName }: { userName: string }) {
+  const [dashboardData, setDashboardData] = useState<DashboardResponse | null>(
+    null,
+  );
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchDashboardData = async () => {
+      try {
+        const token = localStorage.getItem("eventflow_token");
+        if (!token) {
+          throw new Error("No authentication token found");
+        }
+
+        const response = await fetch("/api/dashboard/stats", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        setDashboardData(data);
+      } catch (err) {
+        console.error("Failed to fetch dashboard data:", err);
+        setError(
+          err instanceof Error ? err.message : "Failed to load dashboard data",
+        );
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDashboardData();
+  }, []);
+
+  if (loading) {
+    return <Loading />;
+  }
+
+  if (error) {
+    return (
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="text-center">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+            Error Loading Dashboard
+          </h2>
+          <p className="text-gray-600 dark:text-gray-400 mb-4">{error}</p>
+          <Button onClick={() => window.location.reload()}>Try Again</Button>
+        </div>
+      </div>
+    );
+  }
+
   const stats = [
     {
       title: "Total Earnings",
-      value: "$847",
+      value: `$${dashboardData?.stats.totalEarnings?.toFixed(2) || "0.00"}`,
       change: "+8%",
       icon: DollarSign,
       color: "text-green-600",
     },
     {
       title: "Drink Orders",
-      value: "89",
+      value: dashboardData?.recentActivity?.length?.toString() || "0",
       change: "+15%",
       icon: Coffee,
       color: "text-brand-blue",
     },
     {
       title: "Events This Month",
-      value: "6",
+      value: dashboardData?.stats.totalEvents?.toString() || "0",
       change: "+1",
       icon: Calendar,
       color: "text-brand-purple",
     },
     {
       title: "Active Orders",
-      value: "4",
+      value: dashboardData?.stats.activeEvents?.toString() || "0",
       change: "Pending",
       icon: Users,
       color: "text-orange-600",
@@ -244,13 +304,13 @@ export function BaristaDashboard({ userName }: { userName: string }) {
               {upcomingEvents.map((event) => (
                 <div
                   key={event.id}
-                  className="p-4 rounded-lg border bg-gray-50/50"
+                  className="p-4 rounded-lg border bg-gradient-to-r from-brand-blue/5 to-brand-purple/5 dark:from-brand-blue/10 dark:to-brand-purple/10 border-brand-blue/20 dark:border-brand-blue/30"
                 >
                   <div className="flex items-center justify-between mb-2">
                     <h3 className="font-medium text-gray-900 dark:text-white">
                       {event.name}
                     </h3>
-                    <Badge className="bg-green-100 text-green-800">
+                    <Badge className="bg-brand-success/10 text-brand-success border-brand-success/20">
                       {event.status}
                     </Badge>
                   </div>

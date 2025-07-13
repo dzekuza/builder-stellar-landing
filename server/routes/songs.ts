@@ -2,16 +2,18 @@ import { RequestHandler } from "express";
 import { z } from "zod";
 import { prisma } from "../lib/prisma";
 import { AuthenticatedRequest } from "../lib/auth";
+import { sendEmail, emailTemplates } from "../lib/email";
 
 const createSongRequestSchema = z.object({
   song: z.string().min(1),
   artist: z.string().min(1),
-  amount: z.number().min(0),
+  amount: z.number().positive(),
   eventId: z.string(),
 });
 
 const updateSongRequestSchema = z.object({
-  status: z.enum(["PENDING", "PLAYING", "PLAYED", "DECLINED"]),
+  status: z.enum(["PENDING", "PLAYING", "PLAYED", "DECLINED"]).optional(),
+  playedAt: z.string().datetime().optional(),
 });
 
 export const getSongRequests: RequestHandler = async (req, res) => {
@@ -73,9 +75,10 @@ export const createSongRequest: RequestHandler = async (req, res) => {
     const user = (req as AuthenticatedRequest).user!;
     const requestData = createSongRequestSchema.parse(req.body);
 
-    // Verify the event exists and is active
+    // Check if event exists and is active
     const event = await prisma.event.findUnique({
       where: { id: requestData.eventId },
+      select: { id: true, isActive: true },
     });
 
     if (!event) {
@@ -88,7 +91,10 @@ export const createSongRequest: RequestHandler = async (req, res) => {
 
     const songRequest = await prisma.songRequest.create({
       data: {
-        ...requestData,
+        song: requestData.song,
+        artist: requestData.artist,
+        amount: requestData.amount,
+        eventId: requestData.eventId,
         requesterId: user.id,
       },
       include: {
@@ -104,10 +110,37 @@ export const createSongRequest: RequestHandler = async (req, res) => {
             id: true,
             name: true,
             venue: true,
+            owner: {
+              select: {
+                id: true,
+                name: true,
+                email: true,
+              },
+            },
           },
         },
       },
     });
+
+    // Send email notification to event owner
+    try {
+      const emailTemplate = emailTemplates.songRequestReceived(
+        songRequest.song,
+        songRequest.artist,
+        songRequest.amount,
+        songRequest.event.name,
+      );
+
+      await sendEmail({
+        to: songRequest.event.owner.email,
+        subject: emailTemplate.subject,
+        html: emailTemplate.html,
+        text: emailTemplate.text,
+      });
+    } catch (emailError) {
+      console.error("Failed to send song request email:", emailError);
+      // Don't fail the request if email fails
+    }
 
     res.status(201).json({ songRequest });
   } catch (error) {
@@ -126,7 +159,7 @@ export const updateSongRequest: RequestHandler = async (req, res) => {
     const updateData = updateSongRequestSchema.parse(req.body);
 
     // Check if user has permission to update this song request
-    const existingSongRequest = await prisma.songRequest.findFirst({
+    const existingRequest = await prisma.songRequest.findFirst({
       where: {
         id,
         event: {
@@ -144,18 +177,20 @@ export const updateSongRequest: RequestHandler = async (req, res) => {
       },
     });
 
-    if (!existingSongRequest) {
+    if (!existingRequest) {
       return res
         .status(404)
         .json({ error: "Song request not found or unauthorized" });
     }
 
+    const processedData: any = { ...updateData };
+    if (updateData.playedAt) {
+      processedData.playedAt = new Date(updateData.playedAt);
+    }
+
     const songRequest = await prisma.songRequest.update({
       where: { id },
-      data: {
-        ...updateData,
-        playedAt: updateData.status === "PLAYED" ? new Date() : null,
-      },
+      data: processedData,
       include: {
         requester: {
           select: {

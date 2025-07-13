@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
+import { useTranslation } from "@/contexts/TranslationContext";
 import { EventFlowLogo } from "./EventFlowLogo";
 import { ThemeToggle } from "./ThemeToggle";
 import { Button } from "@/components/ui/button";
@@ -26,6 +27,7 @@ import {
 
 export function Navigation() {
   const { user, isAuthenticated, logout } = useAuth();
+  const { t } = useTranslation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
 
@@ -47,25 +49,25 @@ export function Navigation() {
   const getRoleLabel = (role: string) => {
     switch (role) {
       case "DJ":
-        return "DJ";
+        return t("role.dj");
       case "BARISTA":
-        return "Barista";
+        return t("role.barista");
       case "HOST":
-        return "Event Host";
+        return t("role.host");
       case "COMPANY":
-        return "Company";
+        return t("role.company");
       default:
         return "";
     }
   };
 
   const navigationItems = [
-    { href: "/dashboard", label: "Dashboard", icon: BarChart3 },
-    { href: "/events", label: "Events", icon: Calendar },
+    { href: "/dashboard", label: t("nav.dashboard"), icon: BarChart3 },
+    { href: "/events", label: t("nav.events"), icon: Calendar },
     ...(user?.role === "COMPANY"
-      ? [{ href: "/team", label: "Team", icon: Users }]
+      ? [{ href: "/team", label: t("nav.team"), icon: Users }]
       : []),
-    { href: "/settings", label: "Settings", icon: Settings },
+    { href: "/settings", label: t("nav.settings"), icon: Settings },
   ];
 
   return (
@@ -74,7 +76,7 @@ export function Navigation() {
         <div className="flex justify-between h-16">
           <div className="flex items-center">
             <Link to="/" className="flex-shrink-0">
-              <EventFlowLogo />
+              <EventFlowLogo showText={false} />
             </Link>
           </div>
 

@@ -16,6 +16,12 @@ import {
   updateSongRequest,
 } from "./routes/songs";
 import { getDashboardStats, getAnalytics } from "./routes/analytics";
+import { sendTestEmail } from "./routes/test-email";
+import {
+  getTeamMembers,
+  inviteTeamMember,
+  removeTeamMember,
+} from "./routes/team";
 
 export function createServer() {
   const app = express();
@@ -30,6 +36,7 @@ export function createServer() {
     res.json({ message: "Hello from Express server v2!" });
   });
   app.get("/api/demo", handleDemo);
+  app.post("/api/test-email", sendTestEmail);
 
   // Authentication routes
   app.post("/api/auth/register", register);
@@ -54,6 +61,11 @@ export function createServer() {
   // Analytics routes
   app.get("/api/dashboard/stats", getDashboardStats);
   app.get("/api/analytics", getAnalytics);
+
+  // Team management routes
+  app.get("/api/team/members", getTeamMembers);
+  app.post("/api/team/invite", inviteTeamMember);
+  app.delete("/api/team/members/:memberId", removeTeamMember);
 
   return app;
 }

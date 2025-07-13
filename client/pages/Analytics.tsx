@@ -1,5 +1,6 @@
 import { Layout } from "@/components/Layout";
 import { useAuth } from "@/contexts/AuthContext";
+import { useState, useEffect } from "react";
 import {
   Card,
   CardContent,
@@ -27,11 +28,100 @@ import {
   Star,
   Clock,
 } from "lucide-react";
+import { Loading } from "@/components/Loading";
+import { Button } from "@/components/ui/button";
+
+interface AnalyticsData {
+  earningsData: Array<{
+    date: string;
+    earnings: number;
+  }>;
+  topItems: Array<{
+    name: string;
+    count: number;
+    earnings: number;
+  }>;
+}
 
 export default function Analytics() {
   const { user } = useAuth();
+  const [analyticsData, setAnalyticsData] = useState<AnalyticsData | null>(
+    null,
+  );
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [timeframe, setTimeframe] = useState("month");
 
-  // Mock data for different user types
+  useEffect(() => {
+    const fetchAnalyticsData = async () => {
+      try {
+        const token = localStorage.getItem("eventflow_token");
+        if (!token) {
+          throw new Error("No authentication token found");
+        }
+
+        const response = await fetch(`/api/analytics?timeframe=${timeframe}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        setAnalyticsData(data);
+      } catch (err) {
+        console.error("Failed to fetch analytics data:", err);
+        setError(
+          err instanceof Error ? err.message : "Failed to load analytics data",
+        );
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (user) {
+      fetchAnalyticsData();
+    }
+  }, [user, timeframe]);
+
+  if (!user) {
+    return null;
+  }
+
+  if (loading) {
+    return (
+      <Layout>
+        <Loading />
+      </Layout>
+    );
+  }
+
+  if (error) {
+    return (
+      <Layout>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="text-center">
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+              Error Loading Analytics
+            </h2>
+            <p className="text-gray-600 dark:text-gray-400 mb-4">{error}</p>
+            <Button onClick={() => window.location.reload()}>Try Again</Button>
+          </div>
+        </div>
+      </Layout>
+    );
+  }
+
+  // Calculate totals from analytics data
+  const totalEarnings =
+    analyticsData?.earningsData.reduce((sum, item) => sum + item.earnings, 0) ||
+    0;
+  const totalItems =
+    analyticsData?.topItems.reduce((sum, item) => sum + item.count, 0) || 0;
+
   const djAnalytics = {
     overview: {
       totalEarnings: 3247,
@@ -99,11 +189,11 @@ export default function Analytics() {
 
   const getAnalyticsData = () => {
     switch (user?.role) {
-      case "dj":
+      case "DJ":
         return djAnalytics;
-      case "barista":
+      case "BARISTA":
         return baristaAnalytics;
-      case "company":
+      case "COMPANY":
         return companyAnalytics;
       default:
         return djAnalytics;
@@ -529,11 +619,11 @@ export default function Analytics() {
 
   const renderAnalytics = () => {
     switch (user?.role) {
-      case "dj":
+      case "DJ":
         return renderDJAnalytics();
-      case "barista":
+      case "BARISTA":
         return renderBaristaAnalytics();
-      case "company":
+      case "COMPANY":
         return renderCompanyAnalytics();
       default:
         return renderDJAnalytics();

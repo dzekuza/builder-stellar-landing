@@ -1,4 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useAuth } from "@/contexts/AuthContext";
+import { Loading } from "@/components/Loading";
+import { toast } from "@/hooks/use-toast";
 import { Layout } from "@/components/Layout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -63,50 +66,10 @@ interface TeamMember {
 }
 
 export default function TeamManagement() {
-  const [teamMembers, setTeamMembers] = useState<TeamMember[]>([
-    {
-      id: "1",
-      name: "DJ Alex",
-      email: "alex@eventflow.com",
-      phone: "+1 (555) 123-4567",
-      role: "dj",
-      status: "active",
-      joinDate: "2023-01-15",
-      eventsCount: 12,
-      totalEarnings: 3250,
-      rating: 4.9,
-      location: "New York, NY",
-      bio: "Professional DJ with 5+ years experience in weddings and corporate events.",
-    },
-    {
-      id: "2",
-      name: "Sarah Barista",
-      email: "sarah@eventflow.com",
-      phone: "+1 (555) 234-5678",
-      role: "barista",
-      status: "active",
-      joinDate: "2023-02-20",
-      eventsCount: 8,
-      totalEarnings: 2100,
-      rating: 4.8,
-      location: "Brooklyn, NY",
-      bio: "Certified barista specializing in specialty coffee and latte art.",
-    },
-    {
-      id: "3",
-      name: "Mike Host",
-      email: "mike@eventflow.com",
-      phone: "+1 (555) 345-6789",
-      role: "host",
-      status: "pending",
-      joinDate: "2023-11-01",
-      eventsCount: 3,
-      totalEarnings: 800,
-      rating: 4.6,
-      location: "Manhattan, NY",
-      bio: "Event coordinator with excellent communication and organizational skills.",
-    },
-  ]);
+  const { user } = useAuth();
+  const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   const [isInviteOpen, setIsInviteOpen] = useState(false);
   const [inviteData, setInviteData] = useState({
@@ -114,6 +77,52 @@ export default function TeamManagement() {
     role: "",
     message: "",
   });
+  const [isInviting, setIsInviting] = useState(false);
+
+  useEffect(() => {
+    const fetchTeamMembers = async () => {
+      try {
+        const token = localStorage.getItem("eventflow_token");
+        if (!token) {
+          throw new Error("No authentication token found");
+        }
+
+        console.log("Fetching team members...");
+        const response = await fetch("/api/team/members", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        console.log("Team members response:", response.status);
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(
+            errorData.error || `HTTP error! status: ${response.status}`,
+          );
+        }
+
+        const data = await response.json();
+        setTeamMembers(data.members || []);
+      } catch (err) {
+        console.error("Failed to fetch team members:", err);
+        setError(
+          err instanceof Error ? err.message : "Failed to load team members",
+        );
+        // For now, set empty array to show empty state instead of error
+        setTeamMembers([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (user?.role === "COMPANY") {
+      fetchTeamMembers();
+    } else {
+      setLoading(false);
+      setError("Access denied. Only company accounts can manage team members.");
+    }
+  }, [user]);
 
   const getRoleIcon = (role: string) => {
     switch (role) {
@@ -154,21 +163,139 @@ export default function TeamManagement() {
     }
   };
 
-  const handleInvite = () => {
-    if (inviteData.email && inviteData.role) {
-      // In real app, this would send an invitation
-      console.log("Sending invitation to:", inviteData);
+  const handleInvite = async () => {
+    if (!inviteData.email || !inviteData.role) {
+      toast({
+        title: "Missing Information",
+        description: "Please provide email and role for the invitation.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsInviting(true);
+    try {
+      const token = localStorage.getItem("eventflow_token");
+      if (!token) {
+        throw new Error("No authentication token found");
+      }
+
+      const response = await fetch("/api/team/invite", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          email: inviteData.email,
+          role: inviteData.role.toUpperCase(),
+          message: inviteData.message,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Failed to send invitation");
+      }
+
+      toast({
+        title: "Invitation Sent!",
+        description: `Invitation sent to ${inviteData.email} successfully.`,
+      });
+
       setInviteData({ email: "", role: "", message: "" });
       setIsInviteOpen(false);
+    } catch (error) {
+      console.error("Failed to send invitation:", error);
+      toast({
+        title: "Error",
+        description:
+          error instanceof Error
+            ? error.message
+            : "Failed to send invitation. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsInviting(false);
     }
   };
 
-  const handleDeleteMember = (id: string) => {
-    setTeamMembers(teamMembers.filter((member) => member.id !== id));
+  const handleDeleteMember = async (id: string) => {
+    const memberToDelete = teamMembers.find((m) => m.id === id);
+    if (!memberToDelete) return;
+
+    if (
+      !window.confirm(
+        `Are you sure you want to remove ${memberToDelete.name} from your team? This action cannot be undone.`,
+      )
+    ) {
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem("eventflow_token");
+      if (!token) {
+        throw new Error("No authentication token found");
+      }
+
+      const response = await fetch(`/api/team/members/${id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to remove team member");
+      }
+
+      setTeamMembers(teamMembers.filter((member) => member.id !== id));
+      toast({
+        title: "Member Removed",
+        description: `${memberToDelete.name} has been removed from your team.`,
+      });
+    } catch (error) {
+      console.error("Failed to remove team member:", error);
+      toast({
+        title: "Error",
+        description: "Failed to remove team member. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
 
   const activeMembers = teamMembers.filter((m) => m.status === "active");
   const pendingMembers = teamMembers.filter((m) => m.status === "pending");
+
+  if (loading) {
+    return (
+      <Layout>
+        <Loading />
+      </Layout>
+    );
+  }
+
+  if (error) {
+    return (
+      <Layout>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="text-center">
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+              {error.includes("Access denied")
+                ? "Access Denied"
+                : "Error Loading Team"}
+            </h2>
+            <p className="text-gray-600 dark:text-gray-400 mb-4">{error}</p>
+            {!error.includes("Access denied") && (
+              <Button onClick={() => window.location.reload()}>
+                Try Again
+              </Button>
+            )}
+          </div>
+        </div>
+      </Layout>
+    );
+  }
 
   return (
     <Layout>
@@ -252,9 +379,9 @@ export default function TeamManagement() {
                   >
                     Cancel
                   </Button>
-                  <Button onClick={handleInvite}>
+                  <Button onClick={handleInvite} disabled={isInviting}>
                     <Send className="w-4 h-4 mr-2" />
-                    Send Invitation
+                    {isInviting ? "Sending..." : "Send Invitation"}
                   </Button>
                 </div>
               </div>
@@ -333,104 +460,130 @@ export default function TeamManagement() {
         </div>
 
         {/* Team Members Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {teamMembers.map((member) => {
-            const RoleIcon = getRoleIcon(member.role);
-            return (
-              <Card key={member.id}>
-                <CardHeader className="pb-3">
-                  <div className="flex items-start justify-between">
-                    <div className="flex items-center space-x-3">
-                      <Avatar className="h-12 w-12">
-                        <AvatarImage src={`/api/placeholder/48/48`} />
-                        <AvatarFallback>
-                          {member.name
-                            .split(" ")
-                            .map((n) => n[0])
-                            .join("")}
-                        </AvatarFallback>
-                      </Avatar>
-                      <div>
-                        <CardTitle className="text-lg">{member.name}</CardTitle>
-                        <div className="flex items-center space-x-2 mt-1">
-                          <Badge
-                            variant="secondary"
-                            className={getRoleColor(member.role)}
-                          >
-                            <RoleIcon className="w-3 h-3 mr-1" />
-                            {member.role.charAt(0).toUpperCase() +
-                              member.role.slice(1)}
-                          </Badge>
-                          <Badge className={getStatusColor(member.status)}>
-                            {member.status}
-                          </Badge>
+        {teamMembers.length === 0 ? (
+          <div className="text-center py-12">
+            <Card className="max-w-md mx-auto">
+              <CardContent className="pt-6">
+                <Users className="mx-auto h-12 w-12 text-gray-400 mb-4" />
+                <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
+                  No team members yet
+                </h3>
+                <p className="text-gray-500 dark:text-gray-400 mb-6 max-w-md mx-auto">
+                  Start building your team by inviting DJs, baristas, and hosts
+                  to join your events.
+                </p>
+                <Button
+                  onClick={() => setIsInviteOpen(true)}
+                  className="bg-gradient-to-r from-brand-purple to-brand-blue text-white px-6 py-3"
+                >
+                  <Plus className="w-4 h-4 mr-2" />
+                  Invite Your First Member
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {teamMembers.map((member) => {
+              const RoleIcon = getRoleIcon(member.role);
+              return (
+                <Card key={member.id}>
+                  <CardHeader className="pb-3">
+                    <div className="flex items-start justify-between">
+                      <div className="flex items-center space-x-3">
+                        <Avatar className="h-12 w-12">
+                          <AvatarImage src={`/api/placeholder/48/48`} />
+                          <AvatarFallback>
+                            {member.name
+                              .split(" ")
+                              .map((n) => n[0])
+                              .join("")}
+                          </AvatarFallback>
+                        </Avatar>
+                        <div>
+                          <CardTitle className="text-lg">
+                            {member.name}
+                          </CardTitle>
+                          <div className="flex items-center space-x-2 mt-1">
+                            <Badge
+                              variant="secondary"
+                              className={getRoleColor(member.role)}
+                            >
+                              <RoleIcon className="w-3 h-3 mr-1" />
+                              {member.role.charAt(0).toUpperCase() +
+                                member.role.slice(1)}
+                            </Badge>
+                            <Badge className={getStatusColor(member.status)}>
+                              {member.status}
+                            </Badge>
+                          </div>
                         </div>
                       </div>
+                      <Button variant="ghost" size="sm">
+                        <MoreHorizontal className="w-4 h-4" />
+                      </Button>
                     </div>
-                    <Button variant="ghost" size="sm">
-                      <MoreHorizontal className="w-4 h-4" />
-                    </Button>
-                  </div>
-                </CardHeader>
+                  </CardHeader>
 
-                <CardContent className="space-y-3">
-                  <p className="text-sm text-gray-600">{member.bio}</p>
+                  <CardContent className="space-y-3">
+                    <p className="text-sm text-gray-600">{member.bio}</p>
 
-                  <div className="space-y-2 text-sm">
-                    <div className="flex items-center space-x-2">
-                      <Mail className="w-4 h-4 text-gray-400" />
-                      <span>{member.email}</span>
+                    <div className="space-y-2 text-sm">
+                      <div className="flex items-center space-x-2">
+                        <Mail className="w-4 h-4 text-gray-400" />
+                        <span>{member.email}</span>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <Phone className="w-4 h-4 text-gray-400" />
+                        <span>{member.phone}</span>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <MapPin className="w-4 h-4 text-gray-400" />
+                        <span>{member.location}</span>
+                      </div>
                     </div>
-                    <div className="flex items-center space-x-2">
-                      <Phone className="w-4 h-4 text-gray-400" />
-                      <span>{member.phone}</span>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <MapPin className="w-4 h-4 text-gray-400" />
-                      <span>{member.location}</span>
-                    </div>
-                  </div>
 
-                  <div className="grid grid-cols-3 gap-3 pt-3 border-t">
-                    <div className="text-center">
-                      <p className="text-lg font-bold text-gray-900">
-                        {member.eventsCount}
-                      </p>
-                      <p className="text-xs text-gray-500">Events</p>
+                    <div className="grid grid-cols-3 gap-3 pt-3 border-t">
+                      <div className="text-center">
+                        <p className="text-lg font-bold text-gray-900">
+                          {member.eventsCount}
+                        </p>
+                        <p className="text-xs text-gray-500">Events</p>
+                      </div>
+                      <div className="text-center">
+                        <p className="text-lg font-bold text-green-600">
+                          ${member.totalEarnings}
+                        </p>
+                        <p className="text-xs text-gray-500">Earnings</p>
+                      </div>
+                      <div className="text-center">
+                        <p className="text-lg font-bold text-yellow-600">
+                          {member.rating}⭐
+                        </p>
+                        <p className="text-xs text-gray-500">Rating</p>
+                      </div>
                     </div>
-                    <div className="text-center">
-                      <p className="text-lg font-bold text-green-600">
-                        ${member.totalEarnings}
-                      </p>
-                      <p className="text-xs text-gray-500">Earnings</p>
-                    </div>
-                    <div className="text-center">
-                      <p className="text-lg font-bold text-yellow-600">
-                        {member.rating}⭐
-                      </p>
-                      <p className="text-xs text-gray-500">Rating</p>
-                    </div>
-                  </div>
 
-                  <div className="flex space-x-2 pt-3">
-                    <Button variant="outline" size="sm" className="flex-1">
-                      <Edit className="w-3 h-3 mr-1" />
-                      Edit
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => handleDeleteMember(member.id)}
-                      className="text-red-600 hover:text-red-700"
-                    >
-                      <Trash2 className="w-3 h-3" />
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            );
-          })}
-        </div>
+                    <div className="flex space-x-2 pt-3">
+                      <Button variant="outline" size="sm" className="flex-1">
+                        <Edit className="w-3 h-3 mr-1" />
+                        Edit
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleDeleteMember(member.id)}
+                        className="text-red-600 hover:text-red-700"
+                      >
+                        <Trash2 className="w-3 h-3" />
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              );
+            })}
+          </div>
+        )}
       </div>
     </Layout>
   );

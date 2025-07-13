@@ -94,7 +94,7 @@ export default function QRGenerator() {
 
   const getEventTypeInfo = () => {
     switch (user?.role) {
-      case "dj":
+      case "DJ":
         return {
           icon: Music,
           title: "Song Request QR Code",
@@ -102,7 +102,7 @@ export default function QRGenerator() {
           features: ["Song requests", "Payment processing", "Live updates"],
           color: "from-brand-purple to-brand-purple-dark",
         };
-      case "barista":
+      case "BARISTA":
         return {
           icon: Coffee,
           title: "Menu QR Code",
@@ -110,7 +110,7 @@ export default function QRGenerator() {
           features: ["Digital menu", "Order placement", "Payment processing"],
           color: "from-brand-blue to-brand-blue-dark",
         };
-      case "host":
+      case "HOST":
         return {
           icon: Users,
           title: "Event QR Code",

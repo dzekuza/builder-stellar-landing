@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Layout } from "@/components/Layout";
 import { useAuth } from "@/contexts/AuthContext";
+import { useTranslation } from "@/contexts/TranslationContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -41,6 +42,7 @@ import {
 
 export default function Settings() {
   const { user } = useAuth();
+  const { t, language, setLanguage } = useTranslation();
   const [showPassword, setShowPassword] = useState(false);
 
   // Profile settings
@@ -86,7 +88,7 @@ export default function Settings() {
   // Appearance settings
   const [appearance, setAppearance] = useState({
     theme: "light",
-    language: "en",
+    language: language,
     dateFormat: "MM/DD/YYYY",
     currency: "USD",
   });
@@ -492,7 +494,7 @@ export default function Settings() {
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
-                {user?.role === "dj" && (
+                {user?.role === "DJ" && (
                   <div className="space-y-2">
                     <Label htmlFor="defaultPrice">
                       Default Song Request Price
@@ -730,18 +732,18 @@ export default function Settings() {
                     <Label>Language</Label>
                     <Select
                       value={appearance.language}
-                      onValueChange={(value) =>
-                        setAppearance({ ...appearance, language: value })
-                      }
+                      onValueChange={(value) => {
+                        setAppearance({ ...appearance, language: value });
+                        setLanguage(value as "en" | "lt" | "ru");
+                      }}
                     >
                       <SelectTrigger>
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="en">English</SelectItem>
-                        <SelectItem value="es">Spanish</SelectItem>
-                        <SelectItem value="fr">French</SelectItem>
-                        <SelectItem value="de">German</SelectItem>
+                        <SelectItem value="lt">Lietuvių</SelectItem>
+                        <SelectItem value="ru">Русский</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
