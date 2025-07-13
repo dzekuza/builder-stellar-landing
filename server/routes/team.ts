@@ -123,7 +123,10 @@ export const inviteTeamMember = async (
 };
 
 // Remove a team member
-export const removeTeamMember = async (req: Request, res: Response) => {
+export const removeTeamMember = async (
+  req: AuthenticatedRequest,
+  res: Response,
+) => {
   try {
     const userId = req.user?.id;
     const userRole = req.user?.role;
