@@ -118,7 +118,7 @@ export default function Register() {
               <h1 className="text-3xl md:text-4xl font-bold mb-4">
                 Choose Your Role
               </h1>
-              <p className="text-lg text-gray-600">
+              <p className="text-lg text-gray-600 dark:text-gray-300">
                 Select the option that best describes how you'll use EventFlow
               </p>
             </div>
@@ -141,16 +141,16 @@ export default function Register() {
                       htmlFor={role.id}
                       className={`cursor-pointer block p-6 rounded-2xl border-2 transition-all duration-300 ${
                         selectedRole === role.id
-                          ? "border-brand-purple bg-brand-purple/5 shadow-lg"
-                          : "border-gray-200 hover:border-brand-purple/50 bg-white"
+                          ? "border-brand-purple bg-brand-purple/10 dark:bg-brand-purple/20 shadow-lg shadow-brand-purple/20"
+                          : "border-gray-200 dark:border-gray-700 hover:border-brand-purple/50 dark:hover:border-brand-purple/50 bg-white dark:bg-gray-800/50 backdrop-blur-sm"
                       }`}
                     >
                       <div className="flex flex-col items-center text-center">
                         <div
                           className={`w-16 h-16 rounded-2xl mb-4 flex items-center justify-center ${
                             selectedRole === role.id
-                              ? "bg-brand-purple text-white"
-                              : "bg-gray-100 text-gray-600"
+                              ? "bg-brand-purple text-white shadow-lg"
+                              : "bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300"
                           }`}
                         >
                           <Icon className="w-8 h-8" />
