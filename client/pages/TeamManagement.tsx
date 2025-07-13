@@ -87,11 +87,13 @@ export default function TeamManagement() {
           throw new Error("No authentication token found");
         }
 
+        console.log("Fetching team members...");
         const response = await fetch("/api/team/members", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
+        console.log("Team members response:", response.status);
 
         if (!response.ok) {
           const errorData = await response.json();
