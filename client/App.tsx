@@ -21,6 +21,7 @@ import MenuManagement from "./pages/MenuManagement";
 import CreateEvent from "./pages/CreateEvent";
 import Analytics from "./pages/Analytics";
 import QRGenerator from "./pages/QRGenerator";
+import TeamManagement from "./pages/TeamManagement";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -128,6 +129,14 @@ function AppRoutes() {
           element={
             <ProtectedRoute>
               <QRGenerator />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/team-management"
+          element={
+            <ProtectedRoute>
+              <TeamManagement />
             </ProtectedRoute>
           }
         />
