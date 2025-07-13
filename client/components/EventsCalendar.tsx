@@ -240,7 +240,7 @@ export function EventsCalendar({
                     setCurrentDate(new Date(parseInt(value), month, 1))
                   }
                 >
-                  <SelectTrigger className="w-[100px] bg-gray-800 border-gray-600 text-white">
+                  <SelectTrigger className="w-[100px] bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
