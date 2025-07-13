@@ -121,51 +121,6 @@ export default function Events() {
     }
   }, [user]);
 
-  const getStatusColor = (status: string) => {
-    switch (status.toLowerCase()) {
-      case "live":
-        return "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400";
-      case "upcoming":
-        return "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400";
-      case "completed":
-        return "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200";
-      case "cancelled":
-        return "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400";
-      default:
-        return "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200";
-    }
-  };
-
-  const getTypeIcon = (role: string) => {
-    switch (role.toLowerCase()) {
-      case "dj":
-        return Music;
-      case "barista":
-        return Coffee;
-      case "host":
-        return UserCheck;
-      case "company":
-        return Users;
-      default:
-        return Calendar;
-    }
-  };
-
-  const getTypeColor = (type: string) => {
-    switch (type) {
-      case "dj":
-        return "bg-brand-purple/10 text-brand-purple dark:bg-brand-purple/20";
-      case "barista":
-        return "bg-brand-blue/10 text-brand-blue dark:bg-brand-blue/20";
-      case "host":
-        return "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400";
-      case "company":
-        return "bg-gradient-to-r from-brand-purple to-brand-blue text-white";
-      default:
-        return "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200";
-    }
-  };
-
   if (loading) {
     return (
       <Layout>
@@ -224,22 +179,18 @@ export default function Events() {
   );
 
   const handleViewLive = (eventId: string) => {
-    // Navigate to live event view
     navigate(`/events/${eventId}/live`);
   };
 
   const handleGenerateQR = (eventId: string) => {
-    // Navigate to QR generator with pre-selected event
     navigate(`/qr-generator?event=${eventId}`);
   };
 
   const handleEditEvent = (eventId: string) => {
-    // Navigate to edit event page
     navigate(`/events/${eventId}/edit`);
   };
 
   const handleDeleteEvent = async (eventId: string) => {
-    // Show confirmation and delete event
     const eventToDelete = events.find((e) => e.id === eventId);
     if (
       window.confirm(
@@ -272,6 +223,51 @@ export default function Events() {
           variant: "destructive",
         });
       }
+    }
+  };
+
+  const getStatusColor = (status: string) => {
+    switch (status.toLowerCase()) {
+      case "live":
+        return "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400";
+      case "upcoming":
+        return "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400";
+      case "completed":
+        return "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200";
+      case "cancelled":
+        return "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400";
+      default:
+        return "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200";
+    }
+  };
+
+  const getTypeIcon = (role: string) => {
+    switch (role.toLowerCase()) {
+      case "dj":
+        return Music;
+      case "barista":
+        return Coffee;
+      case "host":
+        return UserCheck;
+      case "company":
+        return Users;
+      default:
+        return Music;
+    }
+  };
+
+  const getTypeColor = (role: string) => {
+    switch (role.toLowerCase()) {
+      case "dj":
+        return "bg-brand-purple/10 text-brand-purple dark:bg-brand-purple/20";
+      case "barista":
+        return "bg-brand-blue/10 text-brand-blue dark:bg-brand-blue/20";
+      case "host":
+        return "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400";
+      case "company":
+        return "bg-gradient-to-r from-brand-purple to-brand-blue text-white";
+      default:
+        return "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200";
     }
   };
 
@@ -349,13 +345,13 @@ export default function Events() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                    Live Now
+                    Upcoming
                   </p>
-                  <p className="text-2xl font-bold text-green-600">
-                    {liveEvents}
+                  <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                    {upcomingEvents}
                   </p>
                 </div>
-                <Badge className="bg-green-100 text-green-800">Live</Badge>
+                <Clock className="h-8 w-8 text-brand-blue" />
               </div>
             </CardContent>
           </Card>
@@ -365,13 +361,13 @@ export default function Events() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                    Upcoming
+                    Live Events
                   </p>
-                  <p className="text-2xl font-bold text-blue-600">
-                    {upcomingEvents}
+                  <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                    {liveEvents}
                   </p>
                 </div>
-                <Badge className="bg-blue-100 text-blue-800">Upcoming</Badge>
+                <Play className="h-8 w-8 text-green-600" />
               </div>
             </CardContent>
           </Card>
@@ -384,7 +380,7 @@ export default function Events() {
                     Total Earnings
                   </p>
                   <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                    ${totalEarnings}
+                    ${totalEarnings.toFixed(2)}
                   </p>
                 </div>
                 <DollarSign className="h-8 w-8 text-green-600" />
@@ -393,7 +389,7 @@ export default function Events() {
           </Card>
         </div>
 
-                {/* Conditional Content Based on View Mode */}
+        {/* Conditional Content Based on View Mode */}
         {viewMode === "calendar" ? (
           <EventsCalendar
             events={events}
@@ -431,254 +427,172 @@ export default function Events() {
               </Select>
             </div>
 
-        {/* Events Grid - 2 Column Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {filteredEvents.map((event) => {
-            const TypeIcon = getTypeIcon(event.type);
-            return (
-              <Card
-                key={event.id}
-                className="hover:shadow-lg transition-all duration-300 border-0 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm hover:-translate-y-1 group"
-              >
-                <CardContent className="p-0">
-                  {/* Header Section */}
-                  <div className="p-6 pb-4">
-                    <div className="flex items-start justify-between mb-4">
-                      <div className="flex items-center space-x-3">
-                        <div
-                          className={`w-12 h-12 rounded-xl flex items-center justify-center ${getTypeColor(
-                            event.type,
-                          )} shadow-sm`}
-                        >
-                          <TypeIcon className="w-6 h-6" />
-                        </div>
-                        <div className="flex-1">
-                          <div className="flex items-center space-x-2 mb-1">
-                            <h3 className="text-lg font-bold text-gray-900 dark:text-white group-hover:text-brand-purple transition-colors">
-                              {event.name}
-                            </h3>
-                            <Badge
-                              className={`${getStatusColor(event.status)} text-xs`}
+            {/* Events Grid - 2 Column Layout */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {filteredEvents.map((event) => {
+                const TypeIcon = getTypeIcon(event.owner.role);
+                return (
+                  <Card
+                    key={event.id}
+                    className="hover:shadow-lg transition-all duration-300 border-0 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm hover:-translate-y-1 group"
+                  >
+                    <CardContent className="p-0">
+                      {/* Header Section */}
+                      <div className="p-6 pb-4">
+                        <div className="flex items-start justify-between mb-4">
+                          <div className="flex items-center space-x-3">
+                            <div
+                              className={`w-12 h-12 rounded-xl flex items-center justify-center ${getTypeColor(
+                                event.owner.role,
+                              )} shadow-sm`}
                             >
-                              {event.status === "live" && (
-                                <div className="w-2 h-2 bg-green-500 rounded-full mr-1 animate-pulse" />
+                              <TypeIcon className="w-6 h-6" />
+                            </div>
+                            <div className="flex-1">
+                              <div className="flex items-center space-x-2 mb-1">
+                                <h3 className="text-lg font-bold text-gray-900 dark:text-white group-hover:text-brand-purple transition-colors">
+                                  {event.name}
+                                </h3>
+                                <Badge className={getStatusColor(event.status)}>
+                                  {event.status.toLowerCase()}
+                                </Badge>
+                              </div>
+                              <p className="text-sm text-gray-600 dark:text-gray-400">
+                                {event.venue}
+                              </p>
+                            </div>
+                          </div>
+                          {event.status === "LIVE" && (
+                            <div className="flex items-center space-x-1 text-green-600">
+                              <div className="w-2 h-2 bg-green-600 rounded-full animate-pulse"></div>
+                              <span className="text-sm font-medium">Live</span>
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Event Details */}
+                        <div className="grid grid-cols-2 gap-4 mb-4">
+                          <div className="flex items-center space-x-2 text-gray-600 dark:text-gray-400">
+                            <Calendar className="w-4 h-4" />
+                            <span className="text-sm">
+                              {new Date(event.date).toLocaleDateString()}
+                            </span>
+                          </div>
+                          <div className="flex items-center space-x-2 text-gray-600 dark:text-gray-400">
+                            <Clock className="w-4 h-4" />
+                            <span className="text-sm">
+                              {new Date(event.startTime).toLocaleTimeString(
+                                [],
+                                {
+                                  hour: "2-digit",
+                                  minute: "2-digit",
+                                },
                               )}
-                              {event.status.toUpperCase()}
-                            </Badge>
+                            </span>
                           </div>
-                          <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
-                            {event.description}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Event Details */}
-                    <div className="grid grid-cols-1 gap-2 mb-4">
-                      <div className="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-400">
-                        <MapPin className="w-4 h-4 text-gray-400 dark:text-gray-500" />
-                        <span className="font-medium">{event.venue}</span>
-                      </div>
-                      <div className="flex items-center space-x-4 text-sm text-gray-600 dark:text-gray-400">
-                        <div className="flex items-center space-x-2">
-                          <Calendar className="w-4 h-4 text-gray-400 dark:text-gray-500" />
-                          <span>
-                            {new Date(event.date).toLocaleDateString()}
-                          </span>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <Clock className="w-4 h-4 text-gray-400 dark:text-gray-500" />
-                          <span>{event.time}</span>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Event Stats */}
-                    <div className="grid grid-cols-2 gap-4 mb-4">
-                      <div className="flex items-center space-x-2">
-                        <div className="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center">
-                          <Users className="w-4 h-4 text-gray-600" />
-                        </div>
-                        <div>
-                          <p className="text-lg font-bold text-gray-900">
-                            {event.attendees}
-                          </p>
-                          <p className="text-xs text-gray-500 dark:text-gray-400">
-                            Attendees
-                          </p>
-                        </div>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
-                          <DollarSign className="w-4 h-4 text-green-600" />
-                        </div>
-                        <div>
-                          <p className="text-lg font-bold text-green-600">
-                            ${event.earnings}
-                          </p>
-                          <p className="text-xs text-gray-500 dark:text-gray-400">
-                            Earnings
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Additional Stats Row */}
-                    {(event.requests !== undefined ||
-                      event.orders !== undefined) && (
-                      <div className="grid grid-cols-2 gap-4 mb-4">
-                        {event.requests !== undefined && (
-                          <div className="flex items-center space-x-2">
-                            <div className="w-8 h-8 bg-brand-purple/10 rounded-lg flex items-center justify-center">
-                              <Music className="w-4 h-4 text-brand-purple" />
-                            </div>
-                            <div>
-                              <p className="text-lg font-bold text-gray-900 dark:text-white">
-                                {event.requests}
-                              </p>
-                              <p className="text-xs text-gray-500 dark:text-gray-400">
-                                Requests
-                              </p>
-                            </div>
+                          <div className="flex items-center space-x-2 text-gray-600 dark:text-gray-400">
+                            <Users className="w-4 h-4" />
+                            <span className="text-sm">
+                              {event.attendeeCount} attendees
+                            </span>
                           </div>
-                        )}
-                        {event.orders !== undefined && (
-                          <div className="flex items-center space-x-2">
-                            <div className="w-8 h-8 bg-brand-blue/10 rounded-lg flex items-center justify-center">
-                              <Coffee className="w-4 h-4 text-brand-blue" />
-                            </div>
-                            <div>
-                              <p className="text-lg font-bold text-gray-900 dark:text-white">
-                                {event.orders}
-                              </p>
-                              <p className="text-xs text-gray-500 dark:text-gray-400">
-                                Orders
-                              </p>
-                            </div>
+                          <div className="flex items-center space-x-2 text-gray-600 dark:text-gray-400">
+                            <DollarSign className="w-4 h-4" />
+                            <span className="text-sm">
+                              ${event.totalEarnings.toFixed(2)} earned
+                            </span>
                           </div>
-                        )}
-                      </div>
-                    )}
+                        </div>
 
-                    {/* Assigned Staff (for company events) */}
-                    {event.assignedStaff && (
-                      <div className="mb-4">
-                        <p className="text-xs font-medium text-gray-600 dark:text-gray-400 mb-2">
-                          Assigned Staff:
-                        </p>
-                        <div className="flex flex-wrap gap-1">
-                          {event.assignedStaff.dj && (
-                            <Badge
-                              variant="outline"
-                              className="text-xs bg-brand-purple/5 border-brand-purple/20"
-                            >
-                              DJ: {event.assignedStaff.dj}
-                            </Badge>
-                          )}
-                          {event.assignedStaff.barista && (
-                            <Badge
-                              variant="outline"
-                              className="text-xs bg-brand-blue/5 border-brand-blue/20"
-                            >
-                              Barista: {event.assignedStaff.barista}
-                            </Badge>
-                          )}
-                          {event.assignedStaff.host && (
-                            <Badge
-                              variant="outline"
-                              className="text-xs bg-green-50 border-green-200"
-                            >
-                              Host: {event.assignedStaff.host}
-                            </Badge>
-                          )}
+                        {/* Activity Stats */}
+                        <div className="flex space-x-4 text-sm">
+                          <div className="flex items-center space-x-1">
+                            <Music className="w-4 h-4 text-brand-purple" />
+                            <span className="text-gray-600 dark:text-gray-400">
+                              {event._count.songRequests} requests
+                            </span>
+                          </div>
+                          <div className="flex items-center space-x-1">
+                            <Coffee className="w-4 h-4 text-brand-blue" />
+                            <span className="text-gray-600 dark:text-gray-400">
+                              {event._count.drinkOrders} orders
+                            </span>
+                          </div>
                         </div>
                       </div>
-                    )}
-                  </div>
 
-                  {/* Action Buttons Footer */}
-                  <div className="px-6 py-4 bg-gray-50/50 dark:bg-gray-700/50 border-t border-gray-100 dark:border-gray-700">
-                    <div className="grid grid-cols-2 gap-2">
-                      {event.status === "live" ? (
+                      {/* Action Buttons */}
+                      <div className="px-6 py-4 border-t bg-gray-50/50 dark:bg-gray-800/50 flex justify-between items-center">
+                        <div className="flex space-x-2">
+                          {event.status === "LIVE" && (
+                            <Button
+                              size="sm"
+                              onClick={() => handleViewLive(event.id)}
+                              className="bg-green-600 hover:bg-green-700 text-white"
+                            >
+                              <Play className="w-4 h-4 mr-1" />
+                              View Live
+                            </Button>
+                          )}
+
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => handleEditEvent(event.id)}
+                          >
+                            <Edit className="w-4 h-4 mr-1" />
+                            Edit
+                          </Button>
+
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => handleGenerateQR(event.id)}
+                          >
+                            <QrCode className="w-4 h-4 mr-1" />
+                            QR
+                          </Button>
+                        </div>
+
                         <Button
+                          variant="ghost"
                           size="sm"
-                          className="bg-green-600 hover:bg-green-700 text-white"
-                          onClick={() => handleViewLive(event.id)}
+                          onClick={() => handleDeleteEvent(event.id)}
+                          className="text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20"
                         >
-                          <Eye className="w-4 h-4 mr-2" />
-                          View Live
+                          <Trash2 className="w-4 h-4" />
                         </Button>
-                      ) : (
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          className="hover:bg-brand-purple/5 hover:border-brand-purple/20"
-                          onClick={() => handleGenerateQR(event.id)}
-                        >
-                          <QrCode className="w-4 h-4 mr-2" />
-                          QR Code
-                        </Button>
-                      )}
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        className="hover:bg-blue-50 hover:border-blue-200"
-                        onClick={() => handleEditEvent(event.id)}
-                      >
-                        <Edit className="w-4 h-4 mr-2" />
-                        Edit
+                      </div>
+                    </CardContent>
+                  </Card>
+                );
+              })}
+            </div>
+
+            {/* Empty State */}
+            {filteredEvents.length === 0 && (
+              <div className="text-center py-12">
+                <Card className="max-w-md mx-auto">
+                  <CardContent className="pt-6">
+                    <Calendar className="mx-auto h-12 w-12 text-gray-400 mb-4" />
+                    <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
+                      No events found
+                    </h3>
+                    <p className="text-gray-500 dark:text-gray-400 mb-6 max-w-md mx-auto">
+                      No events match your current filters. Try adjusting your
+                      filters or create a new event.
+                    </p>
+                    <Link to="/create-event">
+                      <Button className="bg-gradient-to-r from-brand-purple to-brand-blue text-white px-6 py-3">
+                        <Plus className="w-4 h-4 mr-2" />
+                        Create Your First Event
                       </Button>
-                      {event.status === "live" && (
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          className="hover:bg-brand-purple/5 hover:border-brand-purple/20 col-span-1"
-                          onClick={() => handleGenerateQR(event.id)}
-                        >
-                          <QrCode className="w-4 h-4 mr-2" />
-                          QR Code
-                        </Button>
-                      )}
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        className="text-red-600 hover:text-red-700 hover:bg-red-50 hover:border-red-200"
-                        onClick={() => handleDeleteEvent(event.id)}
-                      >
-                        <Trash2 className="w-4 h-4 mr-2" />
-                        Delete
-                      </Button>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            );
-          })}
-        </div>
-
-        {filteredEvents.length === 0 && (
-          <div className="col-span-full">
-            <Card className="bg-gradient-to-br from-gray-50 to-white dark:from-gray-800 dark:to-gray-900">
-              <CardContent className="p-12 text-center">
-                <div className="w-24 h-24 bg-gradient-to-br from-brand-purple/10 to-brand-blue/10 rounded-2xl mx-auto mb-6 flex items-center justify-center">
-                  <Calendar className="w-12 h-12 text-brand-purple" />
-                </div>
-                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
-                  No events found
-                </h3>
-                <p className="text-gray-500 dark:text-gray-400 mb-6 max-w-md mx-auto">
-                  No events match your current filters. Try adjusting your
-                  filters or create a new event.
-                </p>
-                <Link to="/create-event">
-                  <Button className="bg-gradient-to-r from-brand-purple to-brand-blue text-white px-6 py-3">
-                    <Plus className="w-4 h-4 mr-2" />
-                    Create Your First Event
-                  </Button>
-                </Link>
-              </CardContent>
-            </Card>
-          </div>
+                    </Link>
+                  </CardContent>
+                </Card>
+              </div>
+            )}
+          </>
         )}
       </div>
     </Layout>
