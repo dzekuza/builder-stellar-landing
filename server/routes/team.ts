@@ -1,6 +1,7 @@
-import { Request, Response } from "express";
+import { Response } from "express";
 import { prisma } from "../lib/prisma";
 import { sendEmail, emailTemplates } from "../lib/email";
+import { AuthenticatedRequest } from "../lib/auth";
 
 // Get team members for a company
 export const getTeamMembers = async (req: Request, res: Response) => {
