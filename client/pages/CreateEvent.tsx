@@ -1,6 +1,8 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Layout } from "@/components/Layout";
 import { useAuth } from "@/contexts/AuthContext";
+import { toast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -58,6 +60,8 @@ export default function CreateEvent() {
 
   const [isCreating, setIsCreating] = useState(false);
   const [eventCreated, setEventCreated] = useState(false);
+  const [createdEventId, setCreatedEventId] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   // Mock data for company staff
   const companyStaff = {
@@ -120,11 +124,86 @@ export default function CreateEvent() {
   };
 
   const handleCreateEvent = async () => {
+    if (
+      !eventData.name ||
+      !eventData.venue ||
+      !eventData.date ||
+      !eventData.time
+    ) {
+      toast({
+        title: "Missing Information",
+        description: "Please fill in all required fields.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setIsCreating(true);
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-    setIsCreating(false);
-    setEventCreated(true);
+    try {
+      const token = localStorage.getItem("eventflow_token");
+      if (!token) {
+        throw new Error("No authentication token found");
+      }
+
+      // Prepare event data for API
+      const eventPayload = {
+        name: eventData.name,
+        description: eventData.description,
+        venue: eventData.venue,
+        date: eventData.date,
+        startTime: `${eventData.date}T${eventData.time}:00.000Z`,
+        // DJ specific
+        ...(user?.role === "DJ" && {
+          songRequestPrice: eventData.allowFreeRequests
+            ? 0
+            : eventData.songRequestPrice,
+          allowFreeRequests: eventData.allowFreeRequests,
+        }),
+        // Barista specific
+        ...(user?.role === "BARISTA" && {
+          selectedDrinks: eventData.selectedDrinks,
+        }),
+        // Company specific
+        ...(user?.role === "COMPANY" && {
+          assignedStaff: eventData.assignedStaff,
+        }),
+      };
+
+      const response = await fetch("/api/events", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(eventPayload),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Failed to create event");
+      }
+
+      const result = await response.json();
+      setCreatedEventId(result.event.id);
+      setEventCreated(true);
+
+      toast({
+        title: "Event Created!",
+        description: `Your event "${eventData.name}" has been created successfully.`,
+      });
+    } catch (error) {
+      console.error("Failed to create event:", error);
+      toast({
+        title: "Error",
+        description:
+          error instanceof Error
+            ? error.message
+            : "Failed to create event. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsCreating(false);
+    }
   };
 
   if (eventCreated) {
@@ -146,13 +225,37 @@ export default function CreateEvent() {
                 go.
               </p>
               <div className="flex justify-center space-x-4">
-                <Button className="bg-gradient-to-r from-brand-purple to-brand-blue">
+                <Button
+                  className="bg-gradient-to-r from-brand-purple to-brand-blue"
+                  onClick={() =>
+                    navigate(`/qr-generator?event=${createdEventId}`)
+                  }
+                  disabled={!createdEventId}
+                >
                   <QrCode className="w-4 h-4 mr-2" />
                   Generate QR Code
                 </Button>
                 <Button
                   variant="outline"
-                  onClick={() => setEventCreated(false)}
+                  onClick={() => {
+                    setEventCreated(false);
+                    setCreatedEventId(null);
+                    setEventData({
+                      name: "",
+                      description: "",
+                      venue: "",
+                      date: "",
+                      time: "",
+                      songRequestPrice: 0,
+                      allowFreeRequests: true,
+                      selectedDrinks: [],
+                      assignedStaff: {
+                        dj: "",
+                        barista: "",
+                        host: "",
+                      },
+                    });
+                  }}
                 >
                   Create Another Event
                 </Button>
