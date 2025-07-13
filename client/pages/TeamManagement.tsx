@@ -71,7 +71,7 @@ export default function TeamManagement() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-    const [isInviteOpen, setIsInviteOpen] = useState(false);
+  const [isInviteOpen, setIsInviteOpen] = useState(false);
   const [inviteData, setInviteData] = useState({
     email: "",
     role: "",
@@ -101,7 +101,9 @@ export default function TeamManagement() {
         setTeamMembers(data.members || []);
       } catch (err) {
         console.error("Failed to fetch team members:", err);
-        setError(err instanceof Error ? err.message : "Failed to load team members");
+        setError(
+          err instanceof Error ? err.message : "Failed to load team members",
+        );
         // For now, set empty array to show empty state instead of error
         setTeamMembers([]);
       } finally {
@@ -156,7 +158,7 @@ export default function TeamManagement() {
     }
   };
 
-    const handleInvite = async () => {
+  const handleInvite = async () => {
     if (!inviteData.email || !inviteData.role) {
       toast({
         title: "Missing Information",
@@ -202,7 +204,10 @@ export default function TeamManagement() {
       console.error("Failed to send invitation:", error);
       toast({
         title: "Error",
-        description: error instanceof Error ? error.message : "Failed to send invitation. Please try again.",
+        description:
+          error instanceof Error
+            ? error.message
+            : "Failed to send invitation. Please try again.",
         variant: "destructive",
       });
     } finally {
@@ -210,11 +215,15 @@ export default function TeamManagement() {
     }
   };
 
-    const handleDeleteMember = async (id: string) => {
-    const memberToDelete = teamMembers.find(m => m.id === id);
+  const handleDeleteMember = async (id: string) => {
+    const memberToDelete = teamMembers.find((m) => m.id === id);
     if (!memberToDelete) return;
 
-    if (!window.confirm(`Are you sure you want to remove ${memberToDelete.name} from your team? This action cannot be undone.`)) {
+    if (
+      !window.confirm(
+        `Are you sure you want to remove ${memberToDelete.name} from your team? This action cannot be undone.`,
+      )
+    ) {
       return;
     }
 
@@ -250,7 +259,7 @@ export default function TeamManagement() {
     }
   };
 
-    const activeMembers = teamMembers.filter((m) => m.status === "active");
+  const activeMembers = teamMembers.filter((m) => m.status === "active");
   const pendingMembers = teamMembers.filter((m) => m.status === "pending");
 
   if (loading) {
@@ -267,11 +276,15 @@ export default function TeamManagement() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="text-center">
             <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
-              {error.includes("Access denied") ? "Access Denied" : "Error Loading Team"}
+              {error.includes("Access denied")
+                ? "Access Denied"
+                : "Error Loading Team"}
             </h2>
             <p className="text-gray-600 dark:text-gray-400 mb-4">{error}</p>
             {!error.includes("Access denied") && (
-              <Button onClick={() => window.location.reload()}>Try Again</Button>
+              <Button onClick={() => window.location.reload()}>
+                Try Again
+              </Button>
             )}
           </div>
         </div>
@@ -361,7 +374,7 @@ export default function TeamManagement() {
                   >
                     Cancel
                   </Button>
-                                    <Button onClick={handleInvite} disabled={isInviting}>
+                  <Button onClick={handleInvite} disabled={isInviting}>
                     <Send className="w-4 h-4 mr-2" />
                     {isInviting ? "Sending..." : "Send Invitation"}
                   </Button>
@@ -441,7 +454,7 @@ export default function TeamManagement() {
           </Card>
         </div>
 
-                {/* Team Members Grid */}
+        {/* Team Members Grid */}
         {teamMembers.length === 0 ? (
           <div className="text-center py-12">
             <Card className="max-w-md mx-auto">
@@ -451,7 +464,8 @@ export default function TeamManagement() {
                   No team members yet
                 </h3>
                 <p className="text-gray-500 dark:text-gray-400 mb-6 max-w-md mx-auto">
-                  Start building your team by inviting DJs, baristas, and hosts to join your events.
+                  Start building your team by inviting DJs, baristas, and hosts
+                  to join your events.
                 </p>
                 <Button
                   onClick={() => setIsInviteOpen(true)}
@@ -466,102 +480,105 @@ export default function TeamManagement() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {teamMembers.map((member) => {
-            const RoleIcon = getRoleIcon(member.role);
-            return (
-              <Card key={member.id}>
-                <CardHeader className="pb-3">
-                  <div className="flex items-start justify-between">
-                    <div className="flex items-center space-x-3">
-                      <Avatar className="h-12 w-12">
-                        <AvatarImage src={`/api/placeholder/48/48`} />
-                        <AvatarFallback>
-                          {member.name
-                            .split(" ")
-                            .map((n) => n[0])
-                            .join("")}
-                        </AvatarFallback>
-                      </Avatar>
-                      <div>
-                        <CardTitle className="text-lg">{member.name}</CardTitle>
-                        <div className="flex items-center space-x-2 mt-1">
-                          <Badge
-                            variant="secondary"
-                            className={getRoleColor(member.role)}
-                          >
-                            <RoleIcon className="w-3 h-3 mr-1" />
-                            {member.role.charAt(0).toUpperCase() +
-                              member.role.slice(1)}
-                          </Badge>
-                          <Badge className={getStatusColor(member.status)}>
-                            {member.status}
-                          </Badge>
+              const RoleIcon = getRoleIcon(member.role);
+              return (
+                <Card key={member.id}>
+                  <CardHeader className="pb-3">
+                    <div className="flex items-start justify-between">
+                      <div className="flex items-center space-x-3">
+                        <Avatar className="h-12 w-12">
+                          <AvatarImage src={`/api/placeholder/48/48`} />
+                          <AvatarFallback>
+                            {member.name
+                              .split(" ")
+                              .map((n) => n[0])
+                              .join("")}
+                          </AvatarFallback>
+                        </Avatar>
+                        <div>
+                          <CardTitle className="text-lg">
+                            {member.name}
+                          </CardTitle>
+                          <div className="flex items-center space-x-2 mt-1">
+                            <Badge
+                              variant="secondary"
+                              className={getRoleColor(member.role)}
+                            >
+                              <RoleIcon className="w-3 h-3 mr-1" />
+                              {member.role.charAt(0).toUpperCase() +
+                                member.role.slice(1)}
+                            </Badge>
+                            <Badge className={getStatusColor(member.status)}>
+                              {member.status}
+                            </Badge>
+                          </div>
                         </div>
                       </div>
+                      <Button variant="ghost" size="sm">
+                        <MoreHorizontal className="w-4 h-4" />
+                      </Button>
                     </div>
-                    <Button variant="ghost" size="sm">
-                      <MoreHorizontal className="w-4 h-4" />
-                    </Button>
-                  </div>
-                </CardHeader>
+                  </CardHeader>
 
-                <CardContent className="space-y-3">
-                  <p className="text-sm text-gray-600">{member.bio}</p>
+                  <CardContent className="space-y-3">
+                    <p className="text-sm text-gray-600">{member.bio}</p>
 
-                  <div className="space-y-2 text-sm">
-                    <div className="flex items-center space-x-2">
-                      <Mail className="w-4 h-4 text-gray-400" />
-                      <span>{member.email}</span>
+                    <div className="space-y-2 text-sm">
+                      <div className="flex items-center space-x-2">
+                        <Mail className="w-4 h-4 text-gray-400" />
+                        <span>{member.email}</span>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <Phone className="w-4 h-4 text-gray-400" />
+                        <span>{member.phone}</span>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <MapPin className="w-4 h-4 text-gray-400" />
+                        <span>{member.location}</span>
+                      </div>
                     </div>
-                    <div className="flex items-center space-x-2">
-                      <Phone className="w-4 h-4 text-gray-400" />
-                      <span>{member.phone}</span>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <MapPin className="w-4 h-4 text-gray-400" />
-                      <span>{member.location}</span>
-                    </div>
-                  </div>
 
-                  <div className="grid grid-cols-3 gap-3 pt-3 border-t">
-                    <div className="text-center">
-                      <p className="text-lg font-bold text-gray-900">
-                        {member.eventsCount}
-                      </p>
-                      <p className="text-xs text-gray-500">Events</p>
+                    <div className="grid grid-cols-3 gap-3 pt-3 border-t">
+                      <div className="text-center">
+                        <p className="text-lg font-bold text-gray-900">
+                          {member.eventsCount}
+                        </p>
+                        <p className="text-xs text-gray-500">Events</p>
+                      </div>
+                      <div className="text-center">
+                        <p className="text-lg font-bold text-green-600">
+                          ${member.totalEarnings}
+                        </p>
+                        <p className="text-xs text-gray-500">Earnings</p>
+                      </div>
+                      <div className="text-center">
+                        <p className="text-lg font-bold text-yellow-600">
+                          {member.rating}⭐
+                        </p>
+                        <p className="text-xs text-gray-500">Rating</p>
+                      </div>
                     </div>
-                    <div className="text-center">
-                      <p className="text-lg font-bold text-green-600">
-                        ${member.totalEarnings}
-                      </p>
-                      <p className="text-xs text-gray-500">Earnings</p>
-                    </div>
-                    <div className="text-center">
-                      <p className="text-lg font-bold text-yellow-600">
-                        {member.rating}⭐
-                      </p>
-                      <p className="text-xs text-gray-500">Rating</p>
-                    </div>
-                  </div>
 
-                  <div className="flex space-x-2 pt-3">
-                    <Button variant="outline" size="sm" className="flex-1">
-                      <Edit className="w-3 h-3 mr-1" />
-                      Edit
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => handleDeleteMember(member.id)}
-                      className="text-red-600 hover:text-red-700"
-                    >
-                      <Trash2 className="w-3 h-3" />
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            );
-          })}
-        </div>
+                    <div className="flex space-x-2 pt-3">
+                      <Button variant="outline" size="sm" className="flex-1">
+                        <Edit className="w-3 h-3 mr-1" />
+                        Edit
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleDeleteMember(member.id)}
+                        className="text-red-600 hover:text-red-700"
+                      >
+                        <Trash2 className="w-3 h-3" />
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              );
+            })}
+          </div>
+        )}
       </div>
     </Layout>
   );
