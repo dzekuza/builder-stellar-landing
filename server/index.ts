@@ -62,5 +62,10 @@ export function createServer() {
   app.get("/api/dashboard/stats", getDashboardStats);
   app.get("/api/analytics", getAnalytics);
 
+  // Team management routes
+  app.get("/api/team/members", getTeamMembers);
+  app.post("/api/team/invite", inviteTeamMember);
+  app.delete("/api/team/members/:memberId", removeTeamMember);
+
   return app;
 }
