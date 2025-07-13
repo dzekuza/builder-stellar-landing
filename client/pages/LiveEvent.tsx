@@ -102,7 +102,7 @@ export default function LiveEvent() {
             </Link>
             <div>
               <div className="flex items-center space-x-3 mb-2">
-                <h1 className="text-3xl font-bold text-gray-900">
+                <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
                   {liveEvent.name}
                 </h1>
                 <Badge className="bg-green-100 text-green-800 animate-pulse">
@@ -110,7 +110,9 @@ export default function LiveEvent() {
                   LIVE
                 </Badge>
               </div>
-              <p className="text-gray-600">{liveEvent.venue}</p>
+              <p className="text-gray-600 dark:text-gray-400">
+                {liveEvent.venue}
+              </p>
             </div>
           </div>
           <Button variant="outline">
@@ -126,7 +128,7 @@ export default function LiveEvent() {
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-gray-600">
+                    <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
                       Live Attendees
                     </p>
                     <p className="text-2xl font-bold text-green-600">
@@ -142,10 +144,10 @@ export default function LiveEvent() {
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-gray-600">
+                    <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
                       DJ Earnings
                     </p>
-                    <p className="text-2xl font-bold text-gray-900">
+                    <p className="text-2xl font-bold text-gray-900 dark:text-white">
                       ${liveEvent.djEarnings}
                     </p>
                   </div>
@@ -158,7 +160,7 @@ export default function LiveEvent() {
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-gray-600">
+                    <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
                       Song Requests
                     </p>
                     <p className="text-2xl font-bold text-brand-purple">25</p>
@@ -172,7 +174,7 @@ export default function LiveEvent() {
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-gray-600">
+                    <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
                       Event Status
                     </p>
                     <p className="text-sm font-bold text-green-600">ACTIVE</p>
@@ -190,7 +192,7 @@ export default function LiveEvent() {
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-gray-600">
+                    <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
                       Live Customers
                     </p>
                     <p className="text-2xl font-bold text-green-600">
@@ -206,10 +208,10 @@ export default function LiveEvent() {
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-gray-600">
+                    <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
                       Barista Earnings
                     </p>
-                    <p className="text-2xl font-bold text-gray-900">
+                    <p className="text-2xl font-bold text-gray-900 dark:text-white">
                       ${liveEvent.baristaEarnings}
                     </p>
                   </div>
@@ -222,7 +224,7 @@ export default function LiveEvent() {
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-gray-600">
+                    <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
                       Drink Orders
                     </p>
                     <p className="text-2xl font-bold text-brand-blue">18</p>
@@ -236,7 +238,7 @@ export default function LiveEvent() {
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-gray-600">
+                    <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
                       Service Status
                     </p>
                     <p className="text-sm font-bold text-green-600">ACTIVE</p>
@@ -254,7 +256,7 @@ export default function LiveEvent() {
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-gray-600">
+                    <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
                       Total Attendees
                     </p>
                     <p className="text-2xl font-bold text-green-600">
@@ -270,10 +272,10 @@ export default function LiveEvent() {
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-gray-600">
+                    <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
                       Total Earnings
                     </p>
-                    <p className="text-2xl font-bold text-gray-900">
+                    <p className="text-2xl font-bold text-gray-900 dark:text-white">
                       ${liveEvent.totalEarnings}
                     </p>
                   </div>
@@ -286,7 +288,7 @@ export default function LiveEvent() {
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-gray-600">
+                    <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
                       Song Requests
                     </p>
                     <p className="text-2xl font-bold text-brand-purple">25</p>
@@ -300,7 +302,7 @@ export default function LiveEvent() {
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-gray-600">
+                    <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
                       Drink Orders
                     </p>
                     <p className="text-2xl font-bold text-brand-blue">18</p>
@@ -329,11 +331,11 @@ export default function LiveEvent() {
                   {liveEvent.recentRequests.map((request) => (
                     <div
                       key={request.id}
-                      className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
+                      className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800 rounded-lg"
                     >
                       <div className="flex-1">
                         <p className="font-medium">{request.song}</p>
-                        <p className="text-sm text-gray-500">
+                        <p className="text-sm text-gray-500 dark:text-gray-400">
                           Requested by {request.requester}
                         </p>
                       </div>
@@ -367,11 +369,11 @@ export default function LiveEvent() {
                   {liveEvent.recentOrders.map((order) => (
                     <div
                       key={order.id}
-                      className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
+                      className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800 rounded-lg"
                     >
                       <div className="flex-1">
                         <p className="font-medium">{order.drink}</p>
-                        <p className="text-sm text-gray-500">
+                        <p className="text-sm text-gray-500 dark:text-gray-400">
                           Ordered by {order.customer}
                         </p>
                       </div>
@@ -419,11 +421,11 @@ export default function LiveEvent() {
                     {liveEvent.recentRequests.slice(0, 3).map((request) => (
                       <div
                         key={request.id}
-                        className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
+                        className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800 rounded-lg"
                       >
                         <div className="flex-1">
                           <p className="font-medium">{request.song}</p>
-                          <p className="text-sm text-gray-500">
+                          <p className="text-sm text-gray-500 dark:text-gray-400">
                             Requested by {request.requester}
                           </p>
                         </div>
@@ -454,11 +456,11 @@ export default function LiveEvent() {
                     {liveEvent.recentOrders.slice(0, 3).map((order) => (
                       <div
                         key={order.id}
-                        className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
+                        className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800 rounded-lg"
                       >
                         <div className="flex-1">
                           <p className="font-medium">{order.drink}</p>
-                          <p className="text-sm text-gray-500">
+                          <p className="text-sm text-gray-500 dark:text-gray-400">
                             Ordered by {order.customer}
                           </p>
                         </div>
@@ -489,6 +491,7 @@ export default function LiveEvent() {
             </>
           )}
 
+          {/* Event Controls - Role Based */}
           <Card>
             <CardHeader>
               <CardTitle>Event Controls</CardTitle>
@@ -498,9 +501,46 @@ export default function LiveEvent() {
               <Button className="w-full bg-gradient-to-r from-brand-purple to-brand-blue">
                 View QR Code
               </Button>
-              <Button variant="outline" className="w-full">
-                Manage Song Queue
-              </Button>
+
+              {/* DJ Controls */}
+              {user?.role === "dj" && (
+                <>
+                  <Button variant="outline" className="w-full">
+                    Manage Song Queue
+                  </Button>
+                  <Button variant="outline" className="w-full">
+                    Accept Song Requests
+                  </Button>
+                </>
+              )}
+
+              {/* Barista Controls */}
+              {user?.role === "barista" && (
+                <>
+                  <Button variant="outline" className="w-full">
+                    Update Order Status
+                  </Button>
+                  <Button variant="outline" className="w-full">
+                    Manage Menu
+                  </Button>
+                </>
+              )}
+
+              {/* Company Controls */}
+              {user?.role === "company" && (
+                <>
+                  <Button variant="outline" className="w-full">
+                    Manage Song Queue
+                  </Button>
+                  <Button variant="outline" className="w-full">
+                    View All Orders
+                  </Button>
+                  <Button variant="outline" className="w-full">
+                    Team Performance
+                  </Button>
+                </>
+              )}
+
               <Button variant="outline" className="w-full">
                 View Analytics
               </Button>
