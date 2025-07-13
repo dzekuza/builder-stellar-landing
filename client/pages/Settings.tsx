@@ -739,9 +739,8 @@ export default function Settings() {
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="en">English</SelectItem>
-                        <SelectItem value="es">Spanish</SelectItem>
-                        <SelectItem value="fr">French</SelectItem>
-                        <SelectItem value="de">German</SelectItem>
+                        <SelectItem value="lt">Lietuvių</SelectItem>
+                        <SelectItem value="ru">Русский</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
