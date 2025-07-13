@@ -237,8 +237,10 @@ export default function Events() {
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Events</h1>
-            <p className="text-gray-600 mt-1">
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+              Events
+            </h1>
+            <p className="text-gray-600 dark:text-gray-400 mt-1">
               Manage and track all your events
             </p>
           </div>
@@ -256,10 +258,10 @@ export default function Events() {
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">
+                  <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
                     Total Events
                   </p>
-                  <p className="text-2xl font-bold text-gray-900">
+                  <p className="text-2xl font-bold text-gray-900 dark:text-white">
                     {events.length}
                   </p>
                 </div>
@@ -272,7 +274,9 @@ export default function Events() {
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">Live Now</p>
+                  <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                    Live Now
+                  </p>
                   <p className="text-2xl font-bold text-green-600">
                     {liveEvents}
                   </p>
@@ -286,7 +290,9 @@ export default function Events() {
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">Upcoming</p>
+                  <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                    Upcoming
+                  </p>
                   <p className="text-2xl font-bold text-blue-600">
                     {upcomingEvents}
                   </p>
@@ -300,10 +306,10 @@ export default function Events() {
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">
+                  <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
                     Total Earnings
                   </p>
-                  <p className="text-2xl font-bold text-gray-900">
+                  <p className="text-2xl font-bold text-gray-900 dark:text-white">
                     ${totalEarnings}
                   </p>
                 </div>
