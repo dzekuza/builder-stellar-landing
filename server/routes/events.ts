@@ -111,6 +111,25 @@ export const createEvent: RequestHandler = async (req, res) => {
       },
     });
 
+    // Send email notification
+    try {
+      const emailTemplate = emailTemplates.eventCreated(
+        event.name,
+        new Date(event.date).toLocaleDateString(),
+        event.venue,
+      );
+
+      await sendEmail({
+        to: user.email,
+        subject: emailTemplate.subject,
+        html: emailTemplate.html,
+        text: emailTemplate.text,
+      });
+    } catch (emailError) {
+      console.error("Failed to send event creation email:", emailError);
+      // Don't fail the request if email fails
+    }
+
     res.status(201).json({ event });
   } catch (error) {
     if (error instanceof z.ZodError) {
