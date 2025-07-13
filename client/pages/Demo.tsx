@@ -17,7 +17,7 @@ export default function Demo() {
 
   const demoUsers = [
     {
-      role: "dj" as UserRole,
+      role: "DJ" as UserRole,
       name: "DJ Alex",
       email: "alex@eventflow.com",
       icon: Music,
@@ -25,7 +25,7 @@ export default function Demo() {
       color: "from-brand-purple to-brand-purple-dark",
     },
     {
-      role: "barista" as UserRole,
+      role: "BARISTA" as UserRole,
       name: "Sarah the Barista",
       email: "sarah@eventflow.com",
       icon: Coffee,
@@ -33,7 +33,7 @@ export default function Demo() {
       color: "from-brand-blue to-brand-blue-dark",
     },
     {
-      role: "host" as UserRole,
+      role: "HOST" as UserRole,
       name: "Mike Host",
       email: "mike@eventflow.com",
       icon: Users,
@@ -41,7 +41,7 @@ export default function Demo() {
       color: "from-brand-success to-green-600",
     },
     {
-      role: "company" as UserRole,
+      role: "COMPANY" as UserRole,
       name: "EventCorp Manager",
       email: "manager@eventcorp.com",
       icon: Building2,
@@ -74,9 +74,9 @@ export default function Demo() {
           email: demoUser.email,
           password: defaultPassword,
           name: demoUser.name,
-          role: demoUser.role.toUpperCase(),
+          role: demoUser.role,
           phone: "+1 (555) 123-4567",
-          companyName: demoUser.role === "company" ? "EventCorp" : undefined,
+          companyName: demoUser.role === "COMPANY" ? "EventCorp" : undefined,
         }),
       });
 
