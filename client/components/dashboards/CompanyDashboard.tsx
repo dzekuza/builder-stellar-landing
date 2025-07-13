@@ -224,30 +224,30 @@ export function CompanyDashboard({ userName }: { userName: string }) {
             </div>
           </CardHeader>
           <CardContent>
-            <div className="space-y-4">
-              {activeEvents.map((event) => (
-                <div
-                  key={event.id}
-                  className="p-4 rounded-lg border bg-gradient-to-r from-brand-purple/5 to-brand-blue/5 dark:from-brand-purple/10 dark:to-brand-blue/10 border-brand-purple/20 dark:border-brand-purple/30"
-                >
-                  <div className="flex items-center justify-between mb-3">
-                    <div>
-                      <h3 className="font-medium text-gray-900 dark:text-white">
-                        {event.name}
-                      </h3>
-                      <p className="text-sm text-gray-600 dark:text-gray-400">
-                        {event.venue} • {event.date} at {event.time}
-                      </p>
-                    </div>
-                    <Badge
-                      className={
-                        event.status === "live"
-                          ? "bg-green-100 text-green-800"
-                          : "bg-blue-100 text-blue-800"
-                      }
-                    >
-                      {event.status}
-                    </Badge>
+                        <div className="space-y-4">
+              {activeEvents.length > 0 ? (
+                activeEvents.map((event) => (
+                  <div
+                    key={event.id}
+                    className="p-4 rounded-lg border bg-gradient-to-r from-brand-purple/5 to-brand-blue/5 dark:from-brand-purple/10 dark:to-brand-blue/10 border-brand-purple/20 dark:border-brand-purple/30"
+                  >
+                    <div className="flex items-center justify-between mb-3">
+                      <div>
+                        <h3 className="font-medium text-gray-900 dark:text-white">
+                          {event.name}
+                        </h3>
+                        <p className="text-sm text-gray-600 dark:text-gray-400">
+                          {event.venue} • {new Date(event.date).toLocaleDateString()} at {new Date(event.startTime).toLocaleTimeString([], {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })}
+                        </p>
+                      </div>
+                      <Badge
+                        className={getStatusColor(event.status)}
+                      >
+                        {event.status.toLowerCase()}
+                      </Badge>
                   </div>
                   <div className="flex items-center justify-between">
                     <div className="flex -space-x-2">
