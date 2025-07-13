@@ -732,9 +732,10 @@ export default function Settings() {
                     <Label>Language</Label>
                     <Select
                       value={appearance.language}
-                      onValueChange={(value) =>
-                        setAppearance({ ...appearance, language: value })
-                      }
+                      onValueChange={(value) => {
+                        setAppearance({ ...appearance, language: value });
+                        setLanguage(value as "en" | "lt" | "ru");
+                      }}
                     >
                       <SelectTrigger>
                         <SelectValue />
