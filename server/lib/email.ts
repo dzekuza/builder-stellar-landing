@@ -141,4 +141,70 @@ export const emailTemplates = {
     `,
     text: `🎉 Event Reminder\n\nYour event "${eventName}" is scheduled for tomorrow!\n\nEvent Details:\nEvent: ${eventName}\nDate: ${eventDate}\nVenue: ${venue}\n\nMake sure you're ready for an amazing event! Check your dashboard for any last-minute preparations.\n\nBest regards,\nThe EventFlow Team`,
   }),
+
+  teamInvitation: (
+    inviterName: string,
+    companyName: string,
+    role: string,
+    inviteLink: string,
+  ) => ({
+    subject: `You're invited to join ${companyName}'s team on EventFlow`,
+    html: `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+        <div style="text-align: center; margin-bottom: 30px;">
+          <div style="display: inline-block; padding: 10px 20px; background: linear-gradient(135deg, #8B5CF6, #3B82F6); border-radius: 12px; margin-bottom: 20px;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 2L15.09 8.26L22 9L17 14L18.18 21L12 17.77L5.82 21L7 14L2 9L8.91 8.26L12 2Z" fill="white"/>
+            </svg>
+          </div>
+          <h1 style="color: #1f2937; margin: 0;">You're Invited!</h1>
+        </div>
+
+        <div style="background: #f8fafc; padding: 30px; border-radius: 12px; margin: 20px 0; border-left: 4px solid #8B5CF6;">
+          <h2 style="color: #8B5CF6; margin-top: 0;">Join ${companyName}'s Team</h2>
+          <p style="font-size: 16px; line-height: 1.6; color: #374151;">Hi there!</p>
+          <p style="font-size: 16px; line-height: 1.6; color: #374151;">
+            <strong>${inviterName}</strong> has invited you to join <strong>${companyName}</strong> as a <strong>${role}</strong> on EventFlow.
+          </p>
+          <p style="font-size: 16px; line-height: 1.6; color: #374151;">
+            EventFlow is a comprehensive event management platform that helps teams manage events, track song requests, handle drink orders, and much more.
+          </p>
+        </div>
+
+        <div style="text-align: center; margin: 30px 0;">
+          <a href="${inviteLink}" style="
+            display: inline-block;
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #8B5CF6, #3B82F6);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 16px;
+            box-shadow: 0 4px 6px rgba(139, 92, 246, 0.3);
+          ">Accept Invitation</a>
+        </div>
+
+        <div style="background: #fef3c7; padding: 20px; border-radius: 8px; margin: 20px 0;">
+          <h3 style="color: #92400e; margin-top: 0;">What you'll get as a ${role}:</h3>
+          <ul style="color: #92400e; margin: 0; padding-left: 20px;">
+            ${getRoleFeatures(role)}
+          </ul>
+        </div>
+
+        <div style="border-top: 1px solid #e5e7eb; padding-top: 20px; margin-top: 30px;">
+          <p style="color: #6b7280; font-size: 14px; margin: 0;">
+            If you didn't expect this invitation, you can safely ignore this email.
+          </p>
+          <p style="color: #6b7280; font-size: 14px; margin: 5px 0 0 0;">
+            This invitation will expire in 7 days.
+          </p>
+        </div>
+
+        <hr style="margin: 30px 0; border: none; border-top: 1px solid #e2e8f0;">
+        <p style="color: #64748b; font-size: 14px; text-align: center;">Best regards,<br>The EventFlow Team</p>
+      </div>
+    `,
+    text: `You're invited to join ${companyName}'s team on EventFlow!\n\nHi there!\n\n${inviterName} has invited you to join ${companyName} as a ${role} on EventFlow.\n\nEventFlow is a comprehensive event management platform that helps teams manage events, track song requests, handle drink orders, and much more.\n\nAccept your invitation: ${inviteLink}\n\nIf you didn't expect this invitation, you can safely ignore this email.\nThis invitation will expire in 7 days.\n\nBest regards,\nThe EventFlow Team`,
+  }),
 };
