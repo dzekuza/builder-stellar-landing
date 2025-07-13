@@ -88,7 +88,7 @@ export default function Settings() {
   // Appearance settings
   const [appearance, setAppearance] = useState({
     theme: "light",
-    language: "en",
+    language: language,
     dateFormat: "MM/DD/YYYY",
     currency: "USD",
   });
