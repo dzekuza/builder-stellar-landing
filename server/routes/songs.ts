@@ -113,6 +113,26 @@ export const createSongRequest: RequestHandler = async (req, res) => {
       },
     });
 
+    // Send email notification to event owner
+    try {
+      const emailTemplate = emailTemplates.songRequestReceived(
+        songRequest.song,
+        songRequest.artist,
+        songRequest.amount,
+        songRequest.event.name,
+      );
+
+      await sendEmail({
+        to: songRequest.event.owner.email,
+        subject: emailTemplate.subject,
+        html: emailTemplate.html,
+        text: emailTemplate.text,
+      });
+    } catch (emailError) {
+      console.error("Failed to send song request email:", emailError);
+      // Don't fail the request if email fails
+    }
+
     res.status(201).json({ songRequest });
   } catch (error) {
     if (error instanceof z.ZodError) {
