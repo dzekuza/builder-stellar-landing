@@ -112,7 +112,7 @@ export default function Index() {
                 EventFlow
               </h1>
 
-              <p className="text-xl md:text-2xl text-gray-600 mb-8 leading-relaxed">
+              <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 mb-8 leading-relaxed">
                 The all-in-one platform for DJs, Baristas, Event Hosts, and
                 Companies to manage events seamlessly
               </p>
@@ -169,7 +169,7 @@ export default function Index() {
               <h2 className="text-3xl md:text-5xl font-bold mb-6">
                 Built for Every Role
               </h2>
-              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
                 Whether you're a DJ taking song requests, a barista managing
                 orders, or running an event company, EventFlow adapts to your
                 needs.
@@ -222,7 +222,7 @@ export default function Index() {
               <h2 className="text-3xl md:text-5xl font-bold mb-6">
                 Powerful Features
               </h2>
-              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
                 Everything you need to run successful events, all in one
                 platform.
               </p>
@@ -239,7 +239,7 @@ export default function Index() {
                     <h3 className="text-xl font-semibold mb-4">
                       {feature.title}
                     </h3>
-                    <p className="text-gray-600 leading-relaxed">
+                    <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
                       {feature.description}
                     </p>
                   </div>
