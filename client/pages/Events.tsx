@@ -419,7 +419,9 @@ export default function Events() {
                           <p className="text-lg font-bold text-gray-900">
                             {event.attendees}
                           </p>
-                          <p className="text-xs text-gray-500">Attendees</p>
+                          <p className="text-xs text-gray-500 dark:text-gray-400">
+                            Attendees
+                          </p>
                         </div>
                       </div>
                       <div className="flex items-center space-x-2">
@@ -430,7 +432,9 @@ export default function Events() {
                           <p className="text-lg font-bold text-green-600">
                             ${event.earnings}
                           </p>
-                          <p className="text-xs text-gray-500">Earnings</p>
+                          <p className="text-xs text-gray-500 dark:text-gray-400">
+                            Earnings
+                          </p>
                         </div>
                       </div>
                     </div>
@@ -445,10 +449,12 @@ export default function Events() {
                               <Music className="w-4 h-4 text-brand-purple" />
                             </div>
                             <div>
-                              <p className="text-lg font-bold text-gray-900">
+                              <p className="text-lg font-bold text-gray-900 dark:text-white">
                                 {event.requests}
                               </p>
-                              <p className="text-xs text-gray-500">Requests</p>
+                              <p className="text-xs text-gray-500 dark:text-gray-400">
+                                Requests
+                              </p>
                             </div>
                           </div>
                         )}
@@ -458,10 +464,12 @@ export default function Events() {
                               <Coffee className="w-4 h-4 text-brand-blue" />
                             </div>
                             <div>
-                              <p className="text-lg font-bold text-gray-900">
+                              <p className="text-lg font-bold text-gray-900 dark:text-white">
                                 {event.orders}
                               </p>
-                              <p className="text-xs text-gray-500">Orders</p>
+                              <p className="text-xs text-gray-500 dark:text-gray-400">
+                                Orders
+                              </p>
                             </div>
                           </div>
                         )}
@@ -471,7 +479,7 @@ export default function Events() {
                     {/* Assigned Staff (for company events) */}
                     {event.assignedStaff && (
                       <div className="mb-4">
-                        <p className="text-xs font-medium text-gray-600 mb-2">
+                        <p className="text-xs font-medium text-gray-600 dark:text-gray-400 mb-2">
                           Assigned Staff:
                         </p>
                         <div className="flex flex-wrap gap-1">
@@ -505,7 +513,7 @@ export default function Events() {
                   </div>
 
                   {/* Action Buttons Footer */}
-                  <div className="px-6 py-4 bg-gray-50/50 border-t border-gray-100">
+                  <div className="px-6 py-4 bg-gray-50/50 dark:bg-gray-700/50 border-t border-gray-100 dark:border-gray-700">
                     <div className="grid grid-cols-2 gap-2">
                       {event.status === "live" ? (
                         <Button
@@ -566,15 +574,15 @@ export default function Events() {
 
         {filteredEvents.length === 0 && (
           <div className="col-span-full">
-            <Card className="bg-gradient-to-br from-gray-50 to-white">
+            <Card className="bg-gradient-to-br from-gray-50 to-white dark:from-gray-800 dark:to-gray-900">
               <CardContent className="p-12 text-center">
                 <div className="w-24 h-24 bg-gradient-to-br from-brand-purple/10 to-brand-blue/10 rounded-2xl mx-auto mb-6 flex items-center justify-center">
                   <Calendar className="w-12 h-12 text-brand-purple" />
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-2">
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
                   No events found
                 </h3>
-                <p className="text-gray-500 mb-6 max-w-md mx-auto">
+                <p className="text-gray-500 dark:text-gray-400 mb-6 max-w-md mx-auto">
                   No events match your current filters. Try adjusting your
                   filters or create a new event.
                 </p>
