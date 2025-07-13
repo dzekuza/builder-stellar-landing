@@ -2,6 +2,7 @@ import { RequestHandler } from "express";
 import { z } from "zod";
 import { prisma } from "../lib/prisma";
 import { AuthenticatedRequest } from "../lib/auth";
+import { sendEmail, emailTemplates } from "../lib/email";
 
 const createSongRequestSchema = z.object({
   song: z.string().min(1),
@@ -88,7 +89,10 @@ export const createSongRequest: RequestHandler = async (req, res) => {
 
     const songRequest = await prisma.songRequest.create({
       data: {
-        ...requestData,
+        song: requestData.song,
+        artist: requestData.artist,
+        amount: requestData.amount,
+        eventId: requestData.eventId,
         requesterId: user.id,
       },
       include: {
