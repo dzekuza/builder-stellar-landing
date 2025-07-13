@@ -31,13 +31,13 @@ export function Navigation() {
 
   const getRoleColor = (role: string) => {
     switch (role) {
-      case "dj":
+      case "DJ":
         return "bg-brand-purple text-white";
-      case "barista":
+      case "BARISTA":
         return "bg-brand-blue text-white";
-      case "host":
+      case "HOST":
         return "bg-brand-success text-white";
-      case "company":
+      case "COMPANY":
         return "bg-gradient-to-r from-brand-purple to-brand-blue text-white";
       default:
         return "bg-secondary text-secondary-foreground";
@@ -46,13 +46,13 @@ export function Navigation() {
 
   const getRoleLabel = (role: string) => {
     switch (role) {
-      case "dj":
+      case "DJ":
         return "DJ";
-      case "barista":
+      case "BARISTA":
         return "Barista";
-      case "host":
+      case "HOST":
         return "Event Host";
-      case "company":
+      case "COMPANY":
         return "Company";
       default:
         return "";
@@ -62,7 +62,7 @@ export function Navigation() {
   const navigationItems = [
     { href: "/dashboard", label: "Dashboard", icon: BarChart3 },
     { href: "/events", label: "Events", icon: Calendar },
-    ...(user?.role === "company"
+    ...(user?.role === "COMPANY"
       ? [{ href: "/team", label: "Team", icon: Users }]
       : []),
     { href: "/settings", label: "Settings", icon: Settings },
