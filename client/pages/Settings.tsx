@@ -42,6 +42,7 @@ import {
 
 export default function Settings() {
   const { user } = useAuth();
+  const { t, language, setLanguage } = useTranslation();
   const [showPassword, setShowPassword] = useState(false);
 
   // Profile settings
