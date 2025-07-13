@@ -39,7 +39,10 @@ import {
   Eye,
   Play,
   Pause,
+  List,
+  CalendarDays,
 } from "lucide-react";
+import { EventsCalendar } from "@/components/EventsCalendar";
 
 interface Event {
   id: string;
@@ -83,6 +86,7 @@ export default function Events() {
   const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [viewMode, setViewMode] = useState("list");
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -284,12 +288,42 @@ export default function Events() {
               Manage and track all your events
             </p>
           </div>
-          <Link to="/create-event">
-            <Button className="bg-gradient-to-r from-brand-purple to-brand-blue">
-              <Plus className="w-4 h-4 mr-2" />
-              Create Event
-            </Button>
-          </Link>
+          <div className="flex items-center gap-4">
+            <div className="flex bg-gray-100 dark:bg-gray-800 rounded-lg p-1">
+              <Button
+                variant={viewMode === "list" ? "default" : "ghost"}
+                size="sm"
+                onClick={() => setViewMode("list")}
+                className={
+                  viewMode === "list"
+                    ? "bg-white dark:bg-gray-700 shadow-sm"
+                    : ""
+                }
+              >
+                <List className="w-4 h-4 mr-2" />
+                List
+              </Button>
+              <Button
+                variant={viewMode === "calendar" ? "default" : "ghost"}
+                size="sm"
+                onClick={() => setViewMode("calendar")}
+                className={
+                  viewMode === "calendar"
+                    ? "bg-white dark:bg-gray-700 shadow-sm"
+                    : ""
+                }
+              >
+                <CalendarDays className="w-4 h-4 mr-2" />
+                Calendar
+              </Button>
+            </div>
+            <Link to="/create-event">
+              <Button className="bg-gradient-to-r from-brand-purple to-brand-blue">
+                <Plus className="w-4 h-4 mr-2" />
+                Create Event
+              </Button>
+            </Link>
+          </div>
         </div>
 
         {/* Stats */}
