@@ -16,6 +16,7 @@ import {
   updateSongRequest,
 } from "./routes/songs";
 import { getDashboardStats, getAnalytics } from "./routes/analytics";
+import { sendTestEmail } from "./routes/test-email";
 
 export function createServer() {
   const app = express();
@@ -30,6 +31,7 @@ export function createServer() {
     res.json({ message: "Hello from Express server v2!" });
   });
   app.get("/api/demo", handleDemo);
+  app.post("/api/test-email", sendTestEmail);
 
   // Authentication routes
   app.post("/api/auth/register", register);
