@@ -250,7 +250,7 @@ export default function LiveEvent() {
           </div>
         )}
 
-        {user?.role === "company" && (
+        {user?.role === "COMPANY" && (
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
             <Card>
               <CardContent className="p-6">
@@ -404,7 +404,7 @@ export default function LiveEvent() {
           )}
 
           {/* Company Role - Show Both */}
-          {user?.role === "company" && (
+          {user?.role === "COMPANY" && (
             <>
               <Card>
                 <CardHeader>
@@ -527,7 +527,7 @@ export default function LiveEvent() {
               )}
 
               {/* Company Controls */}
-              {user?.role === "company" && (
+              {user?.role === "COMPANY" && (
                 <>
                   <Button variant="outline" className="w-full">
                     Manage Song Queue
