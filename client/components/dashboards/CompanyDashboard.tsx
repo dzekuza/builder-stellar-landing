@@ -284,7 +284,7 @@ export function CompanyDashboard({ userName }: { userName: string }) {
               {activeEvents.map((event) => (
                 <div
                   key={event.id}
-                  className="p-4 rounded-lg border bg-gray-50/50 dark:bg-gray-800/50 dark:border-gray-700"
+                  className="p-4 rounded-lg border bg-gradient-to-r from-brand-purple/5 to-brand-blue/5 dark:from-brand-purple/10 dark:to-brand-blue/10 border-brand-purple/20 dark:border-brand-purple/30"
                 >
                   <div className="flex items-center justify-between mb-3">
                     <div>
@@ -354,7 +354,7 @@ export function CompanyDashboard({ userName }: { userName: string }) {
                 return (
                   <div
                     key={member.id}
-                    className="flex items-center justify-between p-4 rounded-lg border bg-gray-50/50"
+                    className="flex items-center justify-between p-4 rounded-lg border bg-gradient-to-r from-brand-blue/5 to-brand-purple/5 dark:from-brand-blue/10 dark:to-brand-purple/10 border-brand-blue/20 dark:border-brand-blue/30"
                   >
                     <div className="flex items-center space-x-3">
                       <Avatar className="h-10 w-10">
