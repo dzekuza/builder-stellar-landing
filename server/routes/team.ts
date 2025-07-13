@@ -37,7 +37,10 @@ export const getTeamMembers = async (
 };
 
 // Invite a team member
-export const inviteTeamMember = async (req: Request, res: Response) => {
+export const inviteTeamMember = async (
+  req: AuthenticatedRequest,
+  res: Response,
+) => {
   try {
     const userId = req.user?.id;
     const userRole = req.user?.role;
