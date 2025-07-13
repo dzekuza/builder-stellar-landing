@@ -25,16 +25,93 @@ import {
   TrendingUp,
   Clock,
 } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Loading } from "@/components/Loading";
+
+interface DashboardStats {
+  totalEvents: number;
+  totalEarnings: number;
+  totalSongRequests: number;
+  activeEvents: number;
+}
+
+interface RecentActivity {
+  id: string;
+  type: string;
+  title: string;
+  subtitle: string;
+  amount: number;
+  status: string;
+  createdAt: string;
+}
+
+interface Event {
+  id: string;
+  name: string;
+  venue: string;
+  date: string;
+  startTime: string;
+  endTime?: string;
+  status: string;
+}
+
+interface DashboardData {
+  stats: DashboardStats;
+  recentActivity: RecentActivity[];
+  upcomingEvents: Event[];
+}
 
 export default function Dashboard() {
   const { user } = useAuth();
+  const [dashboardData, setDashboardData] = useState<DashboardData | null>(
+    null,
+  );
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchDashboardData = async () => {
+      try {
+        const token = localStorage.getItem("eventflow_token");
+        if (!token) {
+          throw new Error("No authentication token found");
+        }
+
+        const response = await fetch("/api/dashboard/stats", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        setDashboardData(data);
+      } catch (err) {
+        console.error("Failed to fetch dashboard data:", err);
+        setError(
+          err instanceof Error ? err.message : "Failed to load dashboard data",
+        );
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (user && (user.role === "DJ" || user.role === "HOST")) {
+      fetchDashboardData();
+    } else {
+      setLoading(false);
+    }
+  }, [user]);
 
   if (!user) {
     return null;
   }
 
   // Show role-specific dashboard
-  if (user.role === "barista") {
+  if (user.role === "BARISTA") {
     return (
       <Layout>
         <BaristaDashboard userName={user.name} />
@@ -42,7 +119,7 @@ export default function Dashboard() {
     );
   }
 
-  if (user.role === "company") {
+  if (user.role === "COMPANY") {
     return (
       <Layout>
         <CompanyDashboard userName={user.name} />
@@ -50,87 +127,86 @@ export default function Dashboard() {
     );
   }
 
+  if (loading) {
+    return (
+      <Layout>
+        <Loading />
+      </Layout>
+    );
+  }
+
+  if (error) {
+    return (
+      <Layout>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="text-center">
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+              Error Loading Dashboard
+            </h2>
+            <p className="text-gray-600 dark:text-gray-400 mb-4">{error}</p>
+            <Button onClick={() => window.location.reload()}>Try Again</Button>
+          </div>
+        </div>
+      </Layout>
+    );
+  }
+
   // Default DJ dashboard (and host for now)
-  // Mock data - in real app this would come from API
   const stats = [
     {
       title: "Total Earnings",
-      value: "$1,247",
+      value: `$${dashboardData?.stats.totalEarnings?.toFixed(2) || "0.00"}`,
       change: "+12%",
       icon: DollarSign,
       color: "text-green-600",
     },
     {
       title: "Song Requests",
-      value: "156",
+      value: dashboardData?.stats.totalSongRequests?.toString() || "0",
       change: "+5%",
       icon: Music,
       color: "text-brand-purple",
     },
     {
       title: "Events This Month",
-      value: "8",
+      value: dashboardData?.stats.totalEvents?.toString() || "0",
       change: "+2",
       icon: Calendar,
       color: "text-brand-blue",
     },
     {
       title: "Active Events",
-      value: "2",
+      value: dashboardData?.stats.activeEvents?.toString() || "0",
       change: "Live now",
       icon: Users,
       color: "text-orange-600",
     },
   ];
 
-  const recentRequests = [
-    {
-      id: 1,
-      song: "Bohemian Rhapsody",
-      artist: "Queen",
-      requester: "Sarah M.",
-      amount: "$5.00",
-      status: "pending",
-      time: "2 min ago",
-    },
-    {
-      id: 2,
-      song: "Sweet Child O' Mine",
-      artist: "Guns N' Roses",
-      requester: "Mike R.",
-      amount: "$3.00",
-      status: "played",
-      time: "15 min ago",
-    },
-    {
-      id: 3,
-      song: "Hotel California",
-      artist: "Eagles",
-      requester: "Jessica K.",
-      amount: "$5.00",
-      status: "pending",
-      time: "18 min ago",
-    },
-  ];
+  const recentRequests =
+    dashboardData?.recentActivity?.map((activity) => ({
+      id: activity.id,
+      song: activity.title.split(" by ")[0] || activity.title,
+      artist: activity.title.split(" by ")[1] || "Unknown Artist",
+      requester:
+        activity.subtitle.split(" by ")[1]?.split(" for ")[0] || "Unknown",
+      amount: `$${activity.amount.toFixed(2)}`,
+      status: activity.status.toLowerCase(),
+      time: new Date(activity.createdAt).toLocaleString(),
+    })) || [];
 
-  const upcomingEvents = [
-    {
-      id: 1,
-      name: "Saturday Night Vibes",
-      venue: "Blue Moon Bar",
-      date: "Dec 16, 2023",
-      time: "9:00 PM",
-      status: "confirmed",
-    },
-    {
-      id: 2,
-      name: "Wedding Reception",
-      venue: "Grand Hotel",
-      date: "Dec 18, 2023",
-      time: "7:00 PM",
-      status: "confirmed",
-    },
-  ];
+  const upcomingEvents =
+    dashboardData?.upcomingEvents?.map((event) => ({
+      id: event.id,
+      name: event.name,
+      venue: event.venue,
+      date: new Date(event.date).toLocaleDateString(),
+      time: new Date(event.startTime).toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+      }),
+      status: event.status.toLowerCase(),
+    })) || [];
 
   return (
     <Layout>
@@ -140,7 +216,7 @@ export default function Dashboard() {
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-                Welcome back, {user.name}! {user.role === "dj" ? "🎵" : "🎉"}
+                Welcome back, {user.name}! {user.role === "DJ" ? "🎵" : "🎉"}
               </h1>
               <p className="text-gray-600 dark:text-gray-400 mt-1">
                 Here's what's happening with your events today
