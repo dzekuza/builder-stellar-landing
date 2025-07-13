@@ -343,7 +343,7 @@ export function EventsCalendar({
                 ))}
                 {calendarDay.events.length > 3 && (
                   <button
-                    className="w-full text-left px-2 py-1 text-xs text-gray-400 hover:text-white"
+                    className="w-full text-left px-2 py-1 text-xs text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-white"
                     onClick={() => {
                       // Could open a day view modal with all events
                       console.log("Show more events for", calendarDay.date);
