@@ -27,6 +27,7 @@ import {
 
 export function Navigation() {
   const { user, isAuthenticated, logout } = useAuth();
+  const { t } = useTranslation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
 
