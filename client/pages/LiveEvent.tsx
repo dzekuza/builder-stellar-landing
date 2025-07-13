@@ -186,7 +186,7 @@ export default function LiveEvent() {
           </div>
         )}
 
-        {user?.role === "barista" && (
+        {user?.role === "BARISTA" && (
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
             <Card>
               <CardContent className="p-6">
@@ -355,7 +355,7 @@ export default function LiveEvent() {
           )}
 
           {/* Barista Role - Show Drink Orders */}
-          {user?.role === "barista" && (
+          {user?.role === "BARISTA" && (
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center space-x-2">
@@ -515,7 +515,7 @@ export default function LiveEvent() {
               )}
 
               {/* Barista Controls */}
-              {user?.role === "barista" && (
+              {user?.role === "BARISTA" && (
                 <>
                   <Button variant="outline" className="w-full">
                     Update Order Status
