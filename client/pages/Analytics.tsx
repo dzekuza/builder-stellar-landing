@@ -619,11 +619,11 @@ export default function Analytics() {
 
   const renderAnalytics = () => {
     switch (user?.role) {
-      case "dj":
+      case "DJ":
         return renderDJAnalytics();
-      case "barista":
+      case "BARISTA":
         return renderBaristaAnalytics();
-      case "company":
+      case "COMPANY":
         return renderCompanyAnalytics();
       default:
         return renderDJAnalytics();
