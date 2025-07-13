@@ -27,43 +27,11 @@ import {
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Loading } from "@/components/Loading";
-
-interface DashboardStats {
-  totalEvents: number;
-  totalEarnings: number;
-  totalSongRequests: number;
-  activeEvents: number;
-}
-
-interface RecentActivity {
-  id: string;
-  type: string;
-  title: string;
-  subtitle: string;
-  amount: number;
-  status: string;
-  createdAt: string;
-}
-
-interface Event {
-  id: string;
-  name: string;
-  venue: string;
-  date: string;
-  startTime: string;
-  endTime?: string;
-  status: string;
-}
-
-interface DashboardData {
-  stats: DashboardStats;
-  recentActivity: RecentActivity[];
-  upcomingEvents: Event[];
-}
+import { DashboardResponse } from "@shared/api";
 
 export default function Dashboard() {
   const { user } = useAuth();
-  const [dashboardData, setDashboardData] = useState<DashboardData | null>(
+  const [dashboardData, setDashboardData] = useState<DashboardResponse | null>(
     null,
   );
   const [loading, setLoading] = useState(true);
