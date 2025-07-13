@@ -272,7 +272,7 @@ export function EventsCalendar({
                 variant="ghost"
                 size="sm"
                 onClick={goToPrevMonth}
-                className="text-white hover:bg-gray-800"
+                className="text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800"
               >
                 <ChevronLeft className="w-4 h-4" />
               </Button>
@@ -280,7 +280,7 @@ export function EventsCalendar({
                 variant="ghost"
                 size="sm"
                 onClick={goToNextMonth}
-                className="text-white hover:bg-gray-800"
+                className="text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800"
               >
                 <ChevronRight className="w-4 h-4" />
               </Button>
