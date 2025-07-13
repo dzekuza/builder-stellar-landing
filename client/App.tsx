@@ -24,6 +24,8 @@ import CreateEvent from "./pages/CreateEvent";
 import Analytics from "./pages/Analytics";
 import QRGenerator from "./pages/QRGenerator";
 import TeamManagement from "./pages/TeamManagement";
+import LiveEvent from "./pages/LiveEvent";
+import EditEvent from "./pages/EditEvent";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -139,6 +141,22 @@ function AppRoutes() {
           element={
             <ProtectedRoute>
               <TeamManagement />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/events/:eventId/live"
+          element={
+            <ProtectedRoute>
+              <LiveEvent />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/events/:eventId/edit"
+          element={
+            <ProtectedRoute>
+              <EditEvent />
             </ProtectedRoute>
           }
         />
