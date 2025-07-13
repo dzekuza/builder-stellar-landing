@@ -129,15 +129,15 @@ export default function Events() {
   const getStatusColor = (status: string) => {
     switch (status) {
       case "live":
-        return "bg-green-100 text-green-800";
+        return "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400";
       case "upcoming":
-        return "bg-blue-100 text-blue-800";
+        return "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400";
       case "completed":
-        return "bg-gray-100 text-gray-800";
+        return "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200";
       case "cancelled":
-        return "bg-red-100 text-red-800";
+        return "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400";
       default:
-        return "bg-gray-100 text-gray-800";
+        return "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200";
     }
   };
 
@@ -159,15 +159,15 @@ export default function Events() {
   const getTypeColor = (type: string) => {
     switch (type) {
       case "dj":
-        return "bg-brand-purple/10 text-brand-purple";
+        return "bg-brand-purple/10 text-brand-purple dark:bg-brand-purple/20";
       case "barista":
-        return "bg-brand-blue/10 text-brand-blue";
+        return "bg-brand-blue/10 text-brand-blue dark:bg-brand-blue/20";
       case "host":
-        return "bg-green-100 text-green-800";
+        return "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400";
       case "company":
         return "bg-gradient-to-r from-brand-purple to-brand-blue text-white";
       default:
-        return "bg-gray-100 text-gray-800";
+        return "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200";
     }
   };
 
