@@ -4,7 +4,7 @@
   publish = "dist/spa"
 
 [build.environment]
-  NODE_VERSION = "18"
+  NODE_VERSION = "18.20.0"
 
 [functions]
   external_node_modules = ["express", "@prisma/client", "prisma", "resend"]

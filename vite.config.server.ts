@@ -48,6 +48,6 @@ export default defineConfig({
     },
   },
   define: {
-    "process.env.NODE_ENV": '"production"',
+    // removed process.env.NODE_ENV override
   },
 });
