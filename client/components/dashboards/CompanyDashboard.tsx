@@ -146,10 +146,10 @@ export function CompanyDashboard({ userName }: { userName: string }) {
       <div className="mb-8">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
               Welcome back, {userName}! 🏢
             </h1>
-            <p className="text-gray-600 mt-1">
+            <p className="text-gray-600 dark:text-gray-400 mt-1">
               Manage your team and events from your company dashboard
             </p>
           </div>
@@ -179,17 +179,17 @@ export function CompanyDashboard({ userName }: { userName: string }) {
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-gray-600">
+                    <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
                       {stat.title}
                     </p>
-                    <p className="text-2xl font-bold text-gray-900">
+                    <p className="text-2xl font-bold text-gray-900 dark:text-white">
                       {stat.value}
                     </p>
                     <p className={`text-sm ${stat.color} font-medium`}>
                       {stat.change}
                     </p>
                   </div>
-                  <div className="h-12 w-12 bg-gray-100 rounded-lg flex items-center justify-center">
+                  <div className="h-12 w-12 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center">
                     <Icon className={`h-6 w-6 ${stat.color}`} />
                   </div>
                 </div>
@@ -224,14 +224,14 @@ export function CompanyDashboard({ userName }: { userName: string }) {
               {activeEvents.map((event) => (
                 <div
                   key={event.id}
-                  className="p-4 rounded-lg border bg-gray-50/50"
+                  className="p-4 rounded-lg border bg-gray-50/50 dark:bg-gray-800/50 dark:border-gray-700"
                 >
                   <div className="flex items-center justify-between mb-3">
                     <div>
-                      <h3 className="font-medium text-gray-900">
+                      <h3 className="font-medium text-gray-900 dark:text-white">
                         {event.name}
                       </h3>
-                      <p className="text-sm text-gray-600">
+                      <p className="text-sm text-gray-600 dark:text-gray-400">
                         {event.venue} • {event.date} at {event.time}
                       </p>
                     </div>
@@ -307,7 +307,7 @@ export function CompanyDashboard({ userName }: { userName: string }) {
                         </AvatarFallback>
                       </Avatar>
                       <div>
-                        <p className="font-medium text-gray-900">
+                        <p className="font-medium text-gray-900 dark:text-white">
                           {member.name}
                         </p>
                         <div className="flex items-center space-x-2">
@@ -319,7 +319,7 @@ export function CompanyDashboard({ userName }: { userName: string }) {
                             {member.role.charAt(0).toUpperCase() +
                               member.role.slice(1)}
                           </Badge>
-                          <span className="text-xs text-gray-500">
+                          <span className="text-xs text-gray-500 dark:text-gray-400">
                             {member.events} events
                           </span>
                         </div>
@@ -329,7 +329,7 @@ export function CompanyDashboard({ userName }: { userName: string }) {
                       <p className="font-medium text-green-600">
                         {member.revenue}
                       </p>
-                      <p className="text-xs text-gray-500">
+                      <p className="text-xs text-gray-500 dark:text-gray-400">
                         ⭐ {member.rating}
                       </p>
                     </div>
@@ -358,28 +358,36 @@ export function CompanyDashboard({ userName }: { userName: string }) {
               <Button variant="outline" className="p-6 h-auto flex-col w-full">
                 <Plus className="w-6 h-6 mb-2" />
                 <span className="font-medium">New Event</span>
-                <span className="text-xs text-gray-500">Create and assign</span>
+                <span className="text-xs text-gray-500 dark:text-gray-400">
+                  Create and assign
+                </span>
               </Button>
             </Link>
             <Link to="/team">
               <Button variant="outline" className="p-6 h-auto flex-col w-full">
                 <Users className="w-6 h-6 mb-2" />
                 <span className="font-medium">Invite Team</span>
-                <span className="text-xs text-gray-500">Add new members</span>
+                <span className="text-xs text-gray-500 dark:text-gray-400">
+                  Add new members
+                </span>
               </Button>
             </Link>
             <Link to="/analytics">
               <Button variant="outline" className="p-6 h-auto flex-col w-full">
                 <TrendingUp className="w-6 h-6 mb-2" />
                 <span className="font-medium">Analytics</span>
-                <span className="text-xs text-gray-500">Company insights</span>
+                <span className="text-xs text-gray-500 dark:text-gray-400">
+                  Company insights
+                </span>
               </Button>
             </Link>
             <Link to="/events">
               <Button variant="outline" className="p-6 h-auto flex-col w-full">
                 <Calendar className="w-6 h-6 mb-2" />
                 <span className="font-medium">Schedule</span>
-                <span className="text-xs text-gray-500">Team calendar</span>
+                <span className="text-xs text-gray-500 dark:text-gray-400">
+                  Team calendar
+                </span>
               </Button>
             </Link>
           </div>
