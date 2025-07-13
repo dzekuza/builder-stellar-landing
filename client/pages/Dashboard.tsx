@@ -1,4 +1,5 @@
 import { Layout } from "@/components/Layout";
+import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -23,8 +24,8 @@ import {
 } from "lucide-react";
 
 export default function Dashboard() {
+  const { user } = useAuth();
   // Mock data - in real app this would come from API
-  const userRole = "dj"; // This would come from auth context
   const stats = [
     {
       title: "Total Earnings",
@@ -106,14 +107,21 @@ export default function Dashboard() {
   ];
 
   return (
-    <Layout userRole={userRole as "dj"} isAuthenticated={true}>
+    <Layout>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-3xl font-bold text-gray-900">
-                Welcome back, John! 🎵
+                Welcome back, {user?.name}!{" "}
+                {user?.role === "dj"
+                  ? "🎵"
+                  : user?.role === "barista"
+                    ? "☕"
+                    : user?.role === "host"
+                      ? "🎉"
+                      : "🏢"}
               </h1>
               <p className="text-gray-600 mt-1">
                 Here's what's happening with your events today
