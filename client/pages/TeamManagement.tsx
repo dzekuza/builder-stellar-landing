@@ -103,6 +103,7 @@ export default function TeamManagement() {
         }
 
         const data = await response.json();
+        console.log("Team members data:", data);
         setTeamMembers(data.members || []);
       } catch (err) {
         console.error("Failed to fetch team members:", err);
