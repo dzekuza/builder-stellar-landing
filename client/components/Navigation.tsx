@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
 import { EventFlowLogo } from "./EventFlowLogo";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -22,15 +23,8 @@ import {
   X,
 } from "lucide-react";
 
-interface NavigationProps {
-  userRole?: "dj" | "barista" | "host" | "company" | null;
-  isAuthenticated?: boolean;
-}
-
-export function Navigation({
-  userRole,
-  isAuthenticated = false,
-}: NavigationProps) {
+export function Navigation() {
+  const { user, isAuthenticated, logout } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
 
@@ -67,7 +61,7 @@ export function Navigation({
   const navigationItems = [
     { href: "/dashboard", label: "Dashboard", icon: BarChart3 },
     { href: "/events", label: "Events", icon: Calendar },
-    ...(userRole === "company"
+    ...(user?.role === "company"
       ? [{ href: "/team", label: "Team", icon: Users }]
       : []),
     { href: "/settings", label: "Settings", icon: Settings },
@@ -109,9 +103,9 @@ export function Navigation({
 
               {/* User Menu */}
               <div className="hidden md:flex items-center space-x-4">
-                {userRole && (
-                  <Badge className={getRoleColor(userRole)}>
-                    {getRoleLabel(userRole)}
+                {user?.role && (
+                  <Badge className={getRoleColor(user.role)}>
+                    {getRoleLabel(user.role)}
                   </Badge>
                 )}
                 <DropdownMenu>
@@ -130,10 +124,10 @@ export function Navigation({
                     <DropdownMenuLabel className="font-normal">
                       <div className="flex flex-col space-y-1">
                         <p className="text-sm font-medium leading-none">
-                          John Doe
+                          {user?.name || "User"}
                         </p>
                         <p className="text-xs leading-none text-muted-foreground">
-                          john@eventflow.com
+                          {user?.email}
                         </p>
                       </div>
                     </DropdownMenuLabel>
@@ -142,7 +136,7 @@ export function Navigation({
                       <Settings className="mr-2 h-4 w-4" />
                       <span>Settings</span>
                     </DropdownMenuItem>
-                    <DropdownMenuItem>
+                    <DropdownMenuItem onClick={logout}>
                       <LogOut className="mr-2 h-4 w-4" />
                       <span>Log out</span>
                     </DropdownMenuItem>
@@ -151,7 +145,15 @@ export function Navigation({
               </div>
 
               {/* Mobile menu button */}
-              <div className="md:hidden flex items-center">
+              <div className="md:hidden flex items-center space-x-2">
+                {user?.role && (
+                  <Badge
+                    className={getRoleColor(user.role)}
+                    variant="secondary"
+                  >
+                    {getRoleLabel(user.role)}
+                  </Badge>
+                )}
                 <Button
                   variant="ghost"
                   size="sm"
