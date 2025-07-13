@@ -252,7 +252,7 @@ export default function Register() {
                 />
               </div>
 
-              {selectedRole === "company" && (
+              {selectedRole === "COMPANY" && (
                 <div className="space-y-2">
                   <Label htmlFor="companyName">Company Name</Label>
                   <Input
