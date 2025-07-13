@@ -79,7 +79,7 @@ export default function Dashboard() {
   }
 
   // Show role-specific dashboard
-  if (user.role.toUpperCase() === "BARISTA") {
+  if (user.role === "BARISTA") {
     return (
       <Layout>
         <BaristaDashboard userName={user.name} />
@@ -87,7 +87,7 @@ export default function Dashboard() {
     );
   }
 
-  if (user.role.toUpperCase() === "COMPANY") {
+  if (user.role === "COMPANY") {
     return (
       <Layout>
         <CompanyDashboard userName={user.name} />
