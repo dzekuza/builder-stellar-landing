@@ -322,7 +322,7 @@ export default function CreateEvent() {
               </Card>
             )}
 
-            {user?.role === "barista" && (
+            {user?.role === "BARISTA" && (
               <Card>
                 <CardHeader>
                   <CardTitle>Menu Selection</CardTitle>
@@ -484,7 +484,7 @@ export default function CreateEvent() {
                   </div>
                 )}
 
-                {user?.role === "barista" && (
+                {user?.role === "BARISTA" && (
                   <div className="space-y-1">
                     <p className="text-sm font-medium">Menu Items:</p>
                     <p className="text-xs text-gray-500">
