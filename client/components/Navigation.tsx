@@ -49,13 +49,13 @@ export function Navigation() {
   const getRoleLabel = (role: string) => {
     switch (role) {
       case "DJ":
-        return "DJ";
+        return t("role.dj");
       case "BARISTA":
-        return "Barista";
+        return t("role.barista");
       case "HOST":
-        return "Event Host";
+        return t("role.host");
       case "COMPANY":
-        return "Company";
+        return t("role.company");
       default:
         return "";
     }
