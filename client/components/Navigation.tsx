@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
+import { useTranslation } from "@/contexts/TranslationContext";
 import { EventFlowLogo } from "./EventFlowLogo";
 import { ThemeToggle } from "./ThemeToggle";
 import { Button } from "@/components/ui/button";
