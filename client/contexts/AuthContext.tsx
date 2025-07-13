@@ -1,4 +1,10 @@
-import { createContext, useContext, useState, ReactNode } from "react";
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  ReactNode,
+} from "react";
 
 export type UserRole = "dj" | "barista" | "host" | "company";
 
@@ -19,6 +25,7 @@ interface AuthContextType {
   register: (userData: Partial<User> & { password: string }) => Promise<void>;
   logout: () => void;
   loading: boolean;
+  initialLoading: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -26,6 +33,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(false);
+  const [initialLoading, setInitialLoading] = useState(true);
 
   const login = async (email: string, password: string) => {
     setLoading(true);
@@ -81,12 +89,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   // Check for existing session on mount
-  useState(() => {
+  useEffect(() => {
     const savedUser = localStorage.getItem("eventflow_user");
     if (savedUser) {
-      setUser(JSON.parse(savedUser));
+      try {
+        setUser(JSON.parse(savedUser));
+      } catch (error) {
+        localStorage.removeItem("eventflow_user");
+      }
     }
-  });
+    setInitialLoading(false);
+  }, []);
 
   return (
     <AuthContext.Provider
@@ -97,6 +110,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         register,
         logout,
         loading,
+        initialLoading,
       }}
     >
       {children}
