@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -115,10 +116,12 @@ export function BaristaDashboard({ userName }: { userName: string }) {
               Ready to brew some amazing drinks today
             </p>
           </div>
-          <Button className="bg-gradient-to-r from-brand-blue to-brand-blue-dark">
-            <Plus className="w-4 h-4 mr-2" />
-            Create Event
-          </Button>
+          <Link to="/create-event">
+            <Button className="bg-gradient-to-r from-brand-blue to-brand-blue-dark">
+              <Plus className="w-4 h-4 mr-2" />
+              Create Event
+            </Button>
+          </Link>
         </div>
       </div>
 
@@ -282,27 +285,33 @@ export function BaristaDashboard({ userName }: { userName: string }) {
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <Button variant="outline" className="p-6 h-auto flex-col">
-              <Plus className="w-6 h-6 mb-2" />
-              <span className="font-medium">Create New Event</span>
-              <span className="text-xs text-gray-500">
-                Set up coffee service for an event
-              </span>
-            </Button>
-            <Button variant="outline" className="p-6 h-auto flex-col">
-              <Package className="w-6 h-6 mb-2" />
-              <span className="font-medium">Manage Menu</span>
-              <span className="text-xs text-gray-500">
-                Update drinks and pricing
-              </span>
-            </Button>
-            <Button variant="outline" className="p-6 h-auto flex-col">
-              <TrendingUp className="w-6 h-6 mb-2" />
-              <span className="font-medium">View Analytics</span>
-              <span className="text-xs text-gray-500">
-                Track sales and popular drinks
-              </span>
-            </Button>
+            <Link to="/create-event">
+              <Button variant="outline" className="p-6 h-auto flex-col w-full">
+                <Plus className="w-6 h-6 mb-2" />
+                <span className="font-medium">Create New Event</span>
+                <span className="text-xs text-gray-500">
+                  Set up coffee service for an event
+                </span>
+              </Button>
+            </Link>
+            <Link to="/menu">
+              <Button variant="outline" className="p-6 h-auto flex-col w-full">
+                <Package className="w-6 h-6 mb-2" />
+                <span className="font-medium">Manage Menu</span>
+                <span className="text-xs text-gray-500">
+                  Update drinks and pricing
+                </span>
+              </Button>
+            </Link>
+            <Link to="/analytics">
+              <Button variant="outline" className="p-6 h-auto flex-col w-full">
+                <TrendingUp className="w-6 h-6 mb-2" />
+                <span className="font-medium">View Analytics</span>
+                <span className="text-xs text-gray-500">
+                  Track sales and popular drinks
+                </span>
+              </Button>
+            </Link>
           </div>
         </CardContent>
       </Card>
