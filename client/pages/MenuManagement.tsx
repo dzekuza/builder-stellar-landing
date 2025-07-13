@@ -38,13 +38,20 @@ import {
   Image,
 } from "lucide-react";
 
+interface Ingredient {
+  id: string;
+  name: string;
+  amount: number;
+  unit: string;
+}
+
 interface DrinkItem {
   id: string;
   name: string;
   description: string;
   price: number;
   category: string;
-  ingredients: string[];
+  ingredients: Ingredient[];
   prepTime: number;
   image?: string;
   isAvailable: boolean;
@@ -60,10 +67,10 @@ export default function MenuManagement() {
       price: 6.5,
       category: "Hot Coffee",
       ingredients: [
-        "Espresso",
-        "Steamed Milk",
-        "Caramel Sauce",
-        "Vanilla Syrup",
+        { id: "1", name: "Espresso", amount: 30, unit: "ml" },
+        { id: "2", name: "Steamed Milk", amount: 150, unit: "ml" },
+        { id: "3", name: "Caramel Sauce", amount: 15, unit: "ml" },
+        { id: "4", name: "Vanilla Syrup", amount: 10, unit: "ml" },
       ],
       prepTime: 4,
       isAvailable: true,
@@ -75,7 +82,11 @@ export default function MenuManagement() {
       description: "Bold espresso shots over ice with cold water",
       price: 4.0,
       category: "Iced Coffee",
-      ingredients: ["Espresso", "Ice", "Cold Water"],
+      ingredients: [
+        { id: "1", name: "Espresso", amount: 60, unit: "ml" },
+        { id: "2", name: "Ice", amount: 100, unit: "g" },
+        { id: "3", name: "Cold Water", amount: 120, unit: "ml" },
+      ],
       prepTime: 2,
       isAvailable: true,
       popularity: 4.5,
@@ -86,7 +97,12 @@ export default function MenuManagement() {
       description: "Smooth espresso with steamed milk and vanilla",
       price: 5.5,
       category: "Hot Coffee",
-      ingredients: ["Espresso", "Steamed Milk", "Vanilla Syrup", "Milk Foam"],
+      ingredients: [
+        { id: "1", name: "Espresso", amount: 30, unit: "ml" },
+        { id: "2", name: "Steamed Milk", amount: 140, unit: "ml" },
+        { id: "3", name: "Vanilla Syrup", amount: 15, unit: "ml" },
+        { id: "4", name: "Milk Foam", amount: 20, unit: "ml" },
+      ],
       prepTime: 3,
       isAvailable: false,
       popularity: 4.6,
@@ -103,6 +119,11 @@ export default function MenuManagement() {
     ingredients: [],
     prepTime: 0,
     isAvailable: true,
+  });
+  const [currentIngredient, setCurrentIngredient] = useState({
+    name: "",
+    amount: 0,
+    unit: "ml",
   });
 
   const categories = [
@@ -180,12 +201,27 @@ export default function MenuManagement() {
     );
   };
 
-  const handleIngredientsChange = (value: string) => {
-    const ingredients = value
-      .split(",")
-      .map((ing) => ing.trim())
-      .filter((ing) => ing);
-    setNewDrink({ ...newDrink, ingredients });
+  const handleAddIngredient = () => {
+    if (currentIngredient.name && currentIngredient.amount > 0) {
+      const newIngredient: Ingredient = {
+        id: Date.now().toString(),
+        name: currentIngredient.name,
+        amount: currentIngredient.amount,
+        unit: currentIngredient.unit,
+      };
+      setNewDrink({
+        ...newDrink,
+        ingredients: [...(newDrink.ingredients || []), newIngredient],
+      });
+      setCurrentIngredient({ name: "", amount: 0, unit: "ml" });
+    }
+  };
+
+  const handleRemoveIngredient = (id: string) => {
+    setNewDrink({
+      ...newDrink,
+      ingredients: (newDrink.ingredients || []).filter((ing) => ing.id !== id),
+    });
   };
 
   return (
@@ -301,15 +337,102 @@ export default function MenuManagement() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="ingredients">
-                    Ingredients (comma separated)
-                  </Label>
-                  <Input
-                    id="ingredients"
-                    value={newDrink.ingredients?.join(", ")}
-                    onChange={(e) => handleIngredientsChange(e.target.value)}
-                    placeholder="Espresso, Steamed Milk, Caramel Sauce"
-                  />
+                  <Label>Ingredients</Label>
+                  <div className="space-y-3">
+                    {/* Current ingredients list */}
+                    {newDrink.ingredients &&
+                      newDrink.ingredients.length > 0 && (
+                        <div className="space-y-2">
+                          <p className="text-sm font-medium">
+                            Added ingredients:
+                          </p>
+                          {newDrink.ingredients.map((ingredient) => (
+                            <div
+                              key={ingredient.id}
+                              className="flex items-center justify-between p-2 bg-gray-50 rounded-md"
+                            >
+                              <span className="text-sm">
+                                {ingredient.name} - {ingredient.amount}
+                                {ingredient.unit}
+                              </span>
+                              <Button
+                                type="button"
+                                variant="ghost"
+                                size="sm"
+                                onClick={() =>
+                                  handleRemoveIngredient(ingredient.id)
+                                }
+                                className="text-red-600 hover:text-red-700"
+                              >
+                                ×
+                              </Button>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+
+                    {/* Add new ingredient */}
+                    <div className="space-y-2 p-3 border rounded-md bg-gray-50/50">
+                      <p className="text-sm font-medium">Add ingredient:</p>
+                      <div className="grid grid-cols-3 gap-2">
+                        <Input
+                          placeholder="Ingredient name"
+                          value={currentIngredient.name}
+                          onChange={(e) =>
+                            setCurrentIngredient({
+                              ...currentIngredient,
+                              name: e.target.value,
+                            })
+                          }
+                        />
+                        <Input
+                          type="number"
+                          placeholder="Amount"
+                          value={currentIngredient.amount || ""}
+                          onChange={(e) =>
+                            setCurrentIngredient({
+                              ...currentIngredient,
+                              amount: parseFloat(e.target.value) || 0,
+                            })
+                          }
+                        />
+                        <Select
+                          value={currentIngredient.unit}
+                          onValueChange={(value) =>
+                            setCurrentIngredient({
+                              ...currentIngredient,
+                              unit: value,
+                            })
+                          }
+                        >
+                          <SelectTrigger>
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="ml">ml</SelectItem>
+                            <SelectItem value="g">g</SelectItem>
+                            <SelectItem value="oz">oz</SelectItem>
+                            <SelectItem value="tsp">tsp</SelectItem>
+                            <SelectItem value="tbsp">tbsp</SelectItem>
+                            <SelectItem value="shots">shots</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={handleAddIngredient}
+                        disabled={
+                          !currentIngredient.name ||
+                          currentIngredient.amount <= 0
+                        }
+                        className="w-full"
+                      >
+                        Add Ingredient
+                      </Button>
+                    </div>
+                  </div>
                 </div>
 
                 <div className="flex justify-end space-x-2">
@@ -459,7 +582,8 @@ export default function MenuManagement() {
                           variant="outline"
                           className="text-xs"
                         >
-                          {ingredient}
+                          {ingredient.name} ({ingredient.amount}
+                          {ingredient.unit})
                         </Badge>
                       ))}
                     </div>
