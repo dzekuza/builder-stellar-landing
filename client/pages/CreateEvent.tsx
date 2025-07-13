@@ -358,7 +358,7 @@ export default function CreateEvent() {
               </Card>
             )}
 
-            {user?.role === "company" && (
+            {user?.role === "COMPANY" && (
               <Card>
                 <CardHeader>
                   <CardTitle>Staff Assignment</CardTitle>
