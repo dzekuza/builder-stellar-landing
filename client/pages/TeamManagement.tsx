@@ -29,5 +29,409 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {\n  Users,\n  Plus,\n  Mail,\n  Phone,\n  MapPin,\n  Calendar,\n  DollarSign,\n  Star,\n  Music,\n  Coffee,\n  UserCheck,\n  Edit,\n  Trash2,\n  MoreHorizontal,\n  Send,\n} from \"lucide-react\";\n\ninterface TeamMember {\n  id: string;\n  name: string;\n  email: string;\n  phone: string;\n  role: \"dj\" | \"barista\" | \"host\";\n  status: \"active\" | \"inactive\" | \"pending\";\n  joinDate: string;\n  eventsCount: number;\n  totalEarnings: number;\n  rating: number;\n  location: string;\n  bio: string;\n}\n\nexport default function TeamManagement() {\n  const [teamMembers, setTeamMembers] = useState<TeamMember[]>([\n    {\n      id: \"1\",\n      name: \"DJ Alex\",\n      email: \"alex@eventflow.com\",\n      phone: \"+1 (555) 123-4567\",\n      role: \"dj\",\n      status: \"active\",\n      joinDate: \"2023-01-15\",\n      eventsCount: 12,\n      totalEarnings: 3250,\n      rating: 4.9,\n      location: \"New York, NY\",\n      bio: \"Professional DJ with 5+ years experience in weddings and corporate events.\",\n    },\n    {\n      id: \"2\",\n      name: \"Sarah Barista\",\n      email: \"sarah@eventflow.com\",\n      phone: \"+1 (555) 234-5678\",\n      role: \"barista\",\n      status: \"active\",\n      joinDate: \"2023-02-20\",\n      eventsCount: 8,\n      totalEarnings: 2100,\n      rating: 4.8,\n      location: \"Brooklyn, NY\",\n      bio: \"Certified barista specializing in specialty coffee and latte art.\",\n    },\n    {\n      id: \"3\",\n      name: \"Mike Host\",\n      email: \"mike@eventflow.com\",\n      phone: \"+1 (555) 345-6789\",\n      role: \"host\",\n      status: \"pending\",\n      joinDate: \"2023-11-01\",\n      eventsCount: 3,\n      totalEarnings: 800,\n      rating: 4.6,\n      location: \"Manhattan, NY\",\n      bio: \"Event coordinator with excellent communication and organizational skills.\",\n    },\n  ]);\n\n  const [isInviteOpen, setIsInviteOpen] = useState(false);\n  const [isEditOpen, setIsEditOpen] = useState(false);\n  const [editingMember, setEditingMember] = useState<TeamMember | null>(null);\n  const [inviteData, setInviteData] = useState({\n    email: \"\",\n    role: \"\",\n    message: \"\",\n  });\n\n  const getRoleIcon = (role: string) => {\n    switch (role) {\n      case \"dj\":\n        return Music;\n      case \"barista\":\n        return Coffee;\n      case \"host\":\n        return UserCheck;\n      default:\n        return Users;\n    }\n  };\n\n  const getRoleColor = (role: string) => {\n    switch (role) {\n      case \"dj\":\n        return \"bg-brand-purple/10 text-brand-purple\";\n      case \"barista\":\n        return \"bg-brand-blue/10 text-brand-blue\";\n      case \"host\":\n        return \"bg-green-100 text-green-800\";\n      default:\n        return \"bg-gray-100 text-gray-800\";\n    }\n  };\n\n  const getStatusColor = (status: string) => {\n    switch (status) {\n      case \"active\":\n        return \"bg-green-100 text-green-800\";\n      case \"inactive\":\n        return \"bg-gray-100 text-gray-800\";\n      case \"pending\":\n        return \"bg-yellow-100 text-yellow-800\";\n      default:\n        return \"bg-gray-100 text-gray-800\";\n    }\n  };\n\n  const handleInvite = () => {\n    if (inviteData.email && inviteData.role) {\n      // In real app, this would send an invitation\n      console.log(\"Sending invitation to:\", inviteData);\n      setInviteData({ email: \"\", role: \"\", message: \"\" });\n      setIsInviteOpen(false);\n    }\n  };\n\n  const handleEditMember = (member: TeamMember) => {\n    setEditingMember(member);\n    setIsEditOpen(true);\n  };\n\n  const handleDeleteMember = (id: string) => {\n    setTeamMembers(teamMembers.filter((member) => member.id !== id));\n  };\n\n  const activeMembers = teamMembers.filter((m) => m.status === \"active\");\n  const pendingMembers = teamMembers.filter((m) => m.status === \"pending\");\n\n  return (\n    <Layout>\n      <div className=\"max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8\">\n        <div className=\"flex items-center justify-between mb-8\">\n          <div>\n            <h1 className=\"text-3xl font-bold text-gray-900\">\n              Team Management\n            </h1>\n            <p className=\"text-gray-600 mt-1\">\n              Manage your team members and their roles\n            </p>\n          </div>\n          <Dialog open={isInviteOpen} onOpenChange={setIsInviteOpen}>\n            <DialogTrigger asChild>\n              <Button className=\"bg-gradient-to-r from-brand-purple to-brand-blue\">\n                <Plus className=\"w-4 h-4 mr-2\" />\n                Invite Member\n              </Button>\n            </DialogTrigger>\n            <DialogContent>\n              <DialogHeader>\n                <DialogTitle>Invite Team Member</DialogTitle>\n                <DialogDescription>\n                  Send an invitation to join your team\n                </DialogDescription>\n              </DialogHeader>\n              <div className=\"space-y-4\">\n                <div className=\"space-y-2\">\n                  <Label htmlFor=\"email\">Email Address</Label>\n                  <Input\n                    id=\"email\"\n                    type=\"email\"\n                    value={inviteData.email}\n                    onChange={(e) =>\n                      setInviteData({ ...inviteData, email: e.target.value })\n                    }\n                    placeholder=\"member@example.com\"\n                  />\n                </div>\n\n                <div className=\"space-y-2\">\n                  <Label htmlFor=\"role\">Role</Label>\n                  <Select\n                    value={inviteData.role}\n                    onValueChange={(value) =>\n                      setInviteData({ ...inviteData, role: value })\n                    }\n                  >\n                    <SelectTrigger>\n                      <SelectValue placeholder=\"Select role\" />\n                    </SelectTrigger>\n                    <SelectContent>\n                      <SelectItem value=\"dj\">DJ</SelectItem>\n                      <SelectItem value=\"barista\">Barista</SelectItem>\n                      <SelectItem value=\"host\">Host</SelectItem>\n                    </SelectContent>\n                  </Select>\n                </div>\n\n                <div className=\"space-y-2\">\n                  <Label htmlFor=\"message\">Personal Message (Optional)</Label>\n                  <Textarea\n                    id=\"message\"\n                    value={inviteData.message}\n                    onChange={(e) =>\n                      setInviteData({ ...inviteData, message: e.target.value })\n                    }\n                    placeholder=\"Welcome to our team...\"\n                    rows={3}\n                  />\n                </div>\n\n                <div className=\"flex justify-end space-x-2\">\n                  <Button\n                    variant=\"outline\"\n                    onClick={() => {\n                      setIsInviteOpen(false);\n                      setInviteData({ email: \"\", role: \"\", message: \"\" });\n                    }}\n                  >\n                    Cancel\n                  </Button>\n                  <Button onClick={handleInvite}>\n                    <Send className=\"w-4 h-4 mr-2\" />\n                    Send Invitation\n                  </Button>\n                </div>\n              </div>\n            </DialogContent>\n          </Dialog>\n        </div>\n\n        {/* Stats */}\n        <div className=\"grid grid-cols-1 md:grid-cols-4 gap-6 mb-8\">\n          <Card>\n            <CardContent className=\"p-6\">\n              <div className=\"flex items-center justify-between\">\n                <div>\n                  <p className=\"text-sm font-medium text-gray-600\">\n                    Total Members\n                  </p>\n                  <p className=\"text-2xl font-bold text-gray-900\">\n                    {teamMembers.length}\n                  </p>\n                </div>\n                <Users className=\"h-8 w-8 text-brand-purple\" />\n              </div>\n            </CardContent>\n          </Card>\n\n          <Card>\n            <CardContent className=\"p-6\">\n              <div className=\"flex items-center justify-between\">\n                <div>\n                  <p className=\"text-sm font-medium text-gray-600\">\n                    Active Members\n                  </p>\n                  <p className=\"text-2xl font-bold text-green-600\">\n                    {activeMembers.length}\n                  </p>\n                </div>\n                <Badge className=\"bg-green-100 text-green-800\">Active</Badge>\n              </div>\n            </CardContent>\n          </Card>\n\n          <Card>\n            <CardContent className=\"p-6\">\n              <div className=\"flex items-center justify-between\">\n                <div>\n                  <p className=\"text-sm font-medium text-gray-600\">\n                    Pending Invites\n                  </p>\n                  <p className=\"text-2xl font-bold text-yellow-600\">\n                    {pendingMembers.length}\n                  </p>\n                </div>\n                <Badge className=\"bg-yellow-100 text-yellow-800\">\n                  Pending\n                </Badge>\n              </div>\n            </CardContent>\n          </Card>\n\n          <Card>\n            <CardContent className=\"p-6\">\n              <div className=\"flex items-center justify-between\">\n                <div>\n                  <p className=\"text-sm font-medium text-gray-600\">\n                    Total Earnings\n                  </p>\n                  <p className=\"text-2xl font-bold text-gray-900\">\n                    $\n                    {teamMembers\n                      .reduce((acc, member) => acc + member.totalEarnings, 0)\n                      .toLocaleString()}\n                  </p>\n                </div>\n                <DollarSign className=\"h-8 w-8 text-green-600\" />\n              </div>\n            </CardContent>\n          </Card>\n        </div>\n\n        {/* Team Members */}\n        <Tabs defaultValue=\"all\" className=\"space-y-6\">\n          <TabsList>\n            <TabsTrigger value=\"all\">All Members ({teamMembers.length})</TabsTrigger>\n            <TabsTrigger value=\"active\">\n              Active ({activeMembers.length})\n            </TabsTrigger>\n            <TabsTrigger value=\"pending\">\n              Pending ({pendingMembers.length})\n            </TabsTrigger>\n          </TabsList>\n\n          <TabsContent value=\"all\" className=\"space-y-6\">\n            <div className=\"grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6\">\n              {teamMembers.map((member) => {\n                const RoleIcon = getRoleIcon(member.role);\n                return (\n                  <Card key={member.id}>\n                    <CardHeader className=\"pb-3\">\n                      <div className=\"flex items-start justify-between\">\n                        <div className=\"flex items-center space-x-3\">\n                          <Avatar className=\"h-12 w-12\">\n                            <AvatarImage src={`/api/placeholder/48/48`} />\n                            <AvatarFallback>\n                              {member.name\n                                .split(\" \")\n                                .map((n) => n[0])\n                                .join(\"\")}\n                            </AvatarFallback>\n                          </Avatar>\n                          <div>\n                            <CardTitle className=\"text-lg\">\n                              {member.name}\n                            </CardTitle>\n                            <div className=\"flex items-center space-x-2 mt-1\">\n                              <Badge\n                                variant=\"secondary\"\n                                className={getRoleColor(member.role)}\n                              >\n                                <RoleIcon className=\"w-3 h-3 mr-1\" />\n                                {member.role.charAt(0).toUpperCase() +\n                                  member.role.slice(1)}\n                              </Badge>\n                              <Badge className={getStatusColor(member.status)}>\n                                {member.status}\n                              </Badge>\n                            </div>\n                          </div>\n                        </div>\n                        <Button variant=\"ghost\" size=\"sm\">\n                          <MoreHorizontal className=\"w-4 h-4\" />\n                        </Button>\n                      </div>\n                    </CardHeader>\n\n                    <CardContent className=\"space-y-3\">\n                      <p className=\"text-sm text-gray-600\">{member.bio}</p>\n\n                      <div className=\"space-y-2 text-sm\">\n                        <div className=\"flex items-center space-x-2\">\n                          <Mail className=\"w-4 h-4 text-gray-400\" />\n                          <span>{member.email}</span>\n                        </div>\n                        <div className=\"flex items-center space-x-2\">\n                          <Phone className=\"w-4 h-4 text-gray-400\" />\n                          <span>{member.phone}</span>\n                        </div>\n                        <div className=\"flex items-center space-x-2\">\n                          <MapPin className=\"w-4 h-4 text-gray-400\" />\n                          <span>{member.location}</span>\n                        </div>\n                      </div>\n\n                      <div className=\"grid grid-cols-3 gap-3 pt-3 border-t\">\n                        <div className=\"text-center\">\n                          <p className=\"text-lg font-bold text-gray-900\">\n                            {member.eventsCount}\n                          </p>\n                          <p className=\"text-xs text-gray-500\">Events</p>\n                        </div>\n                        <div className=\"text-center\">\n                          <p className=\"text-lg font-bold text-green-600\">\n                            ${member.totalEarnings}\n                          </p>\n                          <p className=\"text-xs text-gray-500\">Earnings</p>\n                        </div>\n                        <div className=\"text-center\">\n                          <p className=\"text-lg font-bold text-yellow-600\">\n                            {member.rating}⭐\n                          </p>\n                          <p className=\"text-xs text-gray-500\">Rating</p>\n                        </div>\n                      </div>\n\n                      <div className=\"flex space-x-2 pt-3\">\n                        <Button\n                          variant=\"outline\"\n                          size=\"sm\"\n                          className=\"flex-1\"\n                          onClick={() => handleEditMember(member)}\n                        >\n                          <Edit className=\"w-3 h-3 mr-1\" />\n                          Edit\n                        </Button>\n                        <Button\n                          variant=\"outline\"\n                          size=\"sm\"\n                          onClick={() => handleDeleteMember(member.id)}\n                          className=\"text-red-600 hover:text-red-700\"\n                        >\n                          <Trash2 className=\"w-3 h-3\" />\n                        </Button>\n                      </div>\n                    </CardContent>\n                  </Card>\n                );\n              })}\n            </div>\n          </TabsContent>\n\n          <TabsContent value=\"active\">\n            <div className=\"grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6\">\n              {activeMembers.map((member) => {\n                const RoleIcon = getRoleIcon(member.role);\n                return (\n                  <Card key={member.id}>\n                    {/* Same card content as above */}\n                    <CardHeader className=\"pb-3\">\n                      <div className=\"flex items-center space-x-3\">\n                        <Avatar className=\"h-12 w-12\">\n                          <AvatarImage src={`/api/placeholder/48/48`} />\n                          <AvatarFallback>\n                            {member.name\n                              .split(\" \")\n                              .map((n) => n[0])\n                              .join(\"\")}\n                          </AvatarFallback>\n                        </Avatar>\n                        <div>\n                          <CardTitle className=\"text-lg\">\n                            {member.name}\n                          </CardTitle>\n                          <Badge\n                            variant=\"secondary\"\n                            className={getRoleColor(member.role)}\n                          >\n                            <RoleIcon className=\"w-3 h-3 mr-1\" />\n                            {member.role.charAt(0).toUpperCase() +\n                              member.role.slice(1)}\n                          </Badge>\n                        </div>\n                      </div>\n                    </CardHeader>\n                    <CardContent>\n                      <p className=\"text-sm text-gray-600 mb-3\">\n                        {member.bio}\n                      </p>\n                      <div className=\"grid grid-cols-3 gap-3\">\n                        <div className=\"text-center\">\n                          <p className=\"font-bold\">{member.eventsCount}</p>\n                          <p className=\"text-xs text-gray-500\">Events</p>\n                        </div>\n                        <div className=\"text-center\">\n                          <p className=\"font-bold text-green-600\">\n                            ${member.totalEarnings}\n                          </p>\n                          <p className=\"text-xs text-gray-500\">Earnings</p>\n                        </div>\n                        <div className=\"text-center\">\n                          <p className=\"font-bold\">{member.rating}⭐</p>\n                          <p className=\"text-xs text-gray-500\">Rating</p>\n                        </div>\n                      </div>\n                    </CardContent>\n                  </Card>\n                );\n              })}\n            </div>\n          </TabsContent>\n\n          <TabsContent value=\"pending\">\n            <div className=\"grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6\">\n              {pendingMembers.map((member) => (\n                <Card key={member.id}>\n                  <CardContent className=\"p-6\">\n                    <div className=\"text-center\">\n                      <Avatar className=\"h-16 w-16 mx-auto mb-4\">\n                        <AvatarFallback>\n                          {member.name\n                            .split(\" \")\n                            .map((n) => n[0])\n                            .join(\"\")}\n                        </AvatarFallback>\n                      </Avatar>\n                      <h3 className=\"font-semibold\">{member.name}</h3>\n                      <p className=\"text-sm text-gray-500\">{member.email}</p>\n                      <Badge className=\"mt-2 bg-yellow-100 text-yellow-800\">\n                        Invitation Pending\n                      </Badge>\n                      <div className=\"flex space-x-2 mt-4\">\n                        <Button variant=\"outline\" size=\"sm\" className=\"flex-1\">\n                          Resend\n                        </Button>\n                        <Button\n                          variant=\"outline\"\n                          size=\"sm\"\n                          className=\"text-red-600\"\n                        >\n                          Cancel\n                        </Button>\n                      </div>\n                    </div>\n                  </CardContent>\n                </Card>\n              ))}\n            </div>\n          </TabsContent>\n        </Tabs>\n      </div>\n    </Layout>\n  );\n}",
-"replace_all": false}]
+import {
+  Users,
+  Plus,
+  Mail,
+  Phone,
+  MapPin,
+  Calendar,
+  DollarSign,
+  Star,
+  Music,
+  Coffee,
+  UserCheck,
+  Edit,
+  Trash2,
+  MoreHorizontal,
+  Send,
+} from "lucide-react";
+
+interface TeamMember {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  role: "dj" | "barista" | "host";
+  status: "active" | "inactive" | "pending";
+  joinDate: string;
+  eventsCount: number;
+  totalEarnings: number;
+  rating: number;
+  location: string;
+  bio: string;
+}
+
+export default function TeamManagement() {
+  const [teamMembers, setTeamMembers] = useState<TeamMember[]>([
+    {
+      id: "1",
+      name: "DJ Alex",
+      email: "alex@eventflow.com",
+      phone: "+1 (555) 123-4567",
+      role: "dj",
+      status: "active",
+      joinDate: "2023-01-15",
+      eventsCount: 12,
+      totalEarnings: 3250,
+      rating: 4.9,
+      location: "New York, NY",
+      bio: "Professional DJ with 5+ years experience in weddings and corporate events.",
+    },
+    {
+      id: "2",
+      name: "Sarah Barista",
+      email: "sarah@eventflow.com",
+      phone: "+1 (555) 234-5678",
+      role: "barista",
+      status: "active",
+      joinDate: "2023-02-20",
+      eventsCount: 8,
+      totalEarnings: 2100,
+      rating: 4.8,
+      location: "Brooklyn, NY",
+      bio: "Certified barista specializing in specialty coffee and latte art.",
+    },
+    {
+      id: "3",
+      name: "Mike Host",
+      email: "mike@eventflow.com",
+      phone: "+1 (555) 345-6789",
+      role: "host",
+      status: "pending",
+      joinDate: "2023-11-01",
+      eventsCount: 3,
+      totalEarnings: 800,
+      rating: 4.6,
+      location: "Manhattan, NY",
+      bio: "Event coordinator with excellent communication and organizational skills.",
+    },
+  ]);
+
+  const [isInviteOpen, setIsInviteOpen] = useState(false);
+  const [inviteData, setInviteData] = useState({
+    email: "",
+    role: "",
+    message: "",
+  });
+
+  const getRoleIcon = (role: string) => {
+    switch (role) {
+      case "dj":
+        return Music;
+      case "barista":
+        return Coffee;
+      case "host":
+        return UserCheck;
+      default:
+        return Users;
+    }
+  };
+
+  const getRoleColor = (role: string) => {
+    switch (role) {
+      case "dj":
+        return "bg-brand-purple/10 text-brand-purple";
+      case "barista":
+        return "bg-brand-blue/10 text-brand-blue";
+      case "host":
+        return "bg-green-100 text-green-800";
+      default:
+        return "bg-gray-100 text-gray-800";
+    }
+  };
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case "active":
+        return "bg-green-100 text-green-800";
+      case "inactive":
+        return "bg-gray-100 text-gray-800";
+      case "pending":
+        return "bg-yellow-100 text-yellow-800";
+      default:
+        return "bg-gray-100 text-gray-800";
+    }
+  };
+
+  const handleInvite = () => {
+    if (inviteData.email && inviteData.role) {
+      // In real app, this would send an invitation
+      console.log("Sending invitation to:", inviteData);
+      setInviteData({ email: "", role: "", message: "" });
+      setIsInviteOpen(false);
+    }
+  };
+
+  const handleDeleteMember = (id: string) => {
+    setTeamMembers(teamMembers.filter((member) => member.id !== id));
+  };
+
+  const activeMembers = teamMembers.filter((m) => m.status === "active");
+  const pendingMembers = teamMembers.filter((m) => m.status === "pending");
+
+  return (
+    <Layout>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900">
+              Team Management
+            </h1>
+            <p className="text-gray-600 mt-1">
+              Manage your team members and their roles
+            </p>
+          </div>
+          <Dialog open={isInviteOpen} onOpenChange={setIsInviteOpen}>
+            <DialogTrigger asChild>
+              <Button className="bg-gradient-to-r from-brand-purple to-brand-blue">
+                <Plus className="w-4 h-4 mr-2" />
+                Invite Member
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Invite Team Member</DialogTitle>
+                <DialogDescription>
+                  Send an invitation to join your team
+                </DialogDescription>
+              </DialogHeader>
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="email">Email Address</Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    value={inviteData.email}
+                    onChange={(e) =>
+                      setInviteData({ ...inviteData, email: e.target.value })
+                    }
+                    placeholder="member@example.com"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="role">Role</Label>
+                  <Select
+                    value={inviteData.role}
+                    onValueChange={(value) =>
+                      setInviteData({ ...inviteData, role: value })
+                    }
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select role" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="dj">DJ</SelectItem>
+                      <SelectItem value="barista">Barista</SelectItem>
+                      <SelectItem value="host">Host</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="message">Personal Message (Optional)</Label>
+                  <Textarea
+                    id="message"
+                    value={inviteData.message}
+                    onChange={(e) =>
+                      setInviteData({ ...inviteData, message: e.target.value })
+                    }
+                    placeholder="Welcome to our team..."
+                    rows={3}
+                  />
+                </div>
+
+                <div className="flex justify-end space-x-2">
+                  <Button
+                    variant="outline"
+                    onClick={() => {
+                      setIsInviteOpen(false);
+                      setInviteData({ email: "", role: "", message: "" });
+                    }}
+                  >
+                    Cancel
+                  </Button>
+                  <Button onClick={handleInvite}>
+                    <Send className="w-4 h-4 mr-2" />
+                    Send Invitation
+                  </Button>
+                </div>
+              </div>
+            </DialogContent>
+          </Dialog>
+        </div>
+
+        {/* Stats */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+          <Card>
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-gray-600">
+                    Total Members
+                  </p>
+                  <p className="text-2xl font-bold text-gray-900">
+                    {teamMembers.length}
+                  </p>
+                </div>
+                <Users className="h-8 w-8 text-brand-purple" />
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-gray-600">
+                    Active Members
+                  </p>
+                  <p className="text-2xl font-bold text-green-600">
+                    {activeMembers.length}
+                  </p>
+                </div>
+                <Badge className="bg-green-100 text-green-800">Active</Badge>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-gray-600">
+                    Pending Invites
+                  </p>
+                  <p className="text-2xl font-bold text-yellow-600">
+                    {pendingMembers.length}
+                  </p>
+                </div>
+                <Badge className="bg-yellow-100 text-yellow-800">Pending</Badge>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-gray-600">
+                    Total Earnings
+                  </p>
+                  <p className="text-2xl font-bold text-gray-900">
+                    $
+                    {teamMembers
+                      .reduce((acc, member) => acc + member.totalEarnings, 0)
+                      .toLocaleString()}
+                  </p>
+                </div>
+                <DollarSign className="h-8 w-8 text-green-600" />
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Team Members Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {teamMembers.map((member) => {
+            const RoleIcon = getRoleIcon(member.role);
+            return (
+              <Card key={member.id}>
+                <CardHeader className="pb-3">
+                  <div className="flex items-start justify-between">
+                    <div className="flex items-center space-x-3">
+                      <Avatar className="h-12 w-12">
+                        <AvatarImage src={`/api/placeholder/48/48`} />
+                        <AvatarFallback>
+                          {member.name
+                            .split(" ")
+                            .map((n) => n[0])
+                            .join("")}
+                        </AvatarFallback>
+                      </Avatar>
+                      <div>
+                        <CardTitle className="text-lg">{member.name}</CardTitle>
+                        <div className="flex items-center space-x-2 mt-1">
+                          <Badge
+                            variant="secondary"
+                            className={getRoleColor(member.role)}
+                          >
+                            <RoleIcon className="w-3 h-3 mr-1" />
+                            {member.role.charAt(0).toUpperCase() +
+                              member.role.slice(1)}
+                          </Badge>
+                          <Badge className={getStatusColor(member.status)}>
+                            {member.status}
+                          </Badge>
+                        </div>
+                      </div>
+                    </div>
+                    <Button variant="ghost" size="sm">
+                      <MoreHorizontal className="w-4 h-4" />
+                    </Button>
+                  </div>
+                </CardHeader>
+
+                <CardContent className="space-y-3">
+                  <p className="text-sm text-gray-600">{member.bio}</p>
+
+                  <div className="space-y-2 text-sm">
+                    <div className="flex items-center space-x-2">
+                      <Mail className="w-4 h-4 text-gray-400" />
+                      <span>{member.email}</span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Phone className="w-4 h-4 text-gray-400" />
+                      <span>{member.phone}</span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <MapPin className="w-4 h-4 text-gray-400" />
+                      <span>{member.location}</span>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-3 gap-3 pt-3 border-t">
+                    <div className="text-center">
+                      <p className="text-lg font-bold text-gray-900">
+                        {member.eventsCount}
+                      </p>
+                      <p className="text-xs text-gray-500">Events</p>
+                    </div>
+                    <div className="text-center">
+                      <p className="text-lg font-bold text-green-600">
+                        ${member.totalEarnings}
+                      </p>
+                      <p className="text-xs text-gray-500">Earnings</p>
+                    </div>
+                    <div className="text-center">
+                      <p className="text-lg font-bold text-yellow-600">
+                        {member.rating}⭐
+                      </p>
+                      <p className="text-xs text-gray-500">Rating</p>
+                    </div>
+                  </div>
+
+                  <div className="flex space-x-2 pt-3">
+                    <Button variant="outline" size="sm" className="flex-1">
+                      <Edit className="w-3 h-3 mr-1" />
+                      Edit
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleDeleteMember(member.id)}
+                      className="text-red-600 hover:text-red-700"
+                    >
+                      <Trash2 className="w-3 h-3" />
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            );
+          })}
+        </div>
+      </div>
+    </Layout>
+  );
+}
