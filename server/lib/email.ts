@@ -29,6 +29,40 @@ export async function sendEmail(options: EmailOptions) {
 }
 
 // Pre-built email templates
+// Helper function for role-specific features
+function getRoleFeatures(role: string): string {
+  switch (role.toUpperCase()) {
+    case "DJ":
+      return `
+        <li>Receive and manage song requests in real-time</li>
+        <li>Track earnings from song requests</li>
+        <li>Set your own pricing for requests</li>
+        <li>View detailed analytics on your performances</li>
+      `;
+    case "BARISTA":
+      return `
+        <li>Manage digital drink menus</li>
+        <li>Receive and fulfill drink orders</li>
+        <li>Track inventory and sales</li>
+        <li>View customer preferences and analytics</li>
+      `;
+    case "HOST":
+      return `
+        <li>Coordinate events and activities</li>
+        <li>Manage guest interactions</li>
+        <li>Oversee event flow and timing</li>
+        <li>Access event analytics and feedback</li>
+      `;
+    default:
+      return `
+        <li>Access to the EventFlow platform</li>
+        <li>Collaborate with your team</li>
+        <li>Manage event activities</li>
+        <li>Track performance metrics</li>
+      `;
+  }
+}
+
 export const emailTemplates = {
   eventCreated: (eventName: string, eventDate: string, venue: string) => ({
     subject: `Event Created: ${eventName}`,
