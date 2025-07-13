@@ -122,7 +122,7 @@ export default function LiveEvent() {
         </div>
 
         {/* Live Stats - Role Based */}
-        {user?.role === "dj" && (
+        {user?.role === "DJ" && (
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
             <Card>
               <CardContent className="p-6">
@@ -317,7 +317,7 @@ export default function LiveEvent() {
         {/* Live Activity - Role Based */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* DJ Role - Show Song Requests */}
-          {user?.role === "dj" && (
+          {user?.role === "DJ" && (
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center space-x-2">
@@ -503,7 +503,7 @@ export default function LiveEvent() {
               </Button>
 
               {/* DJ Controls */}
-              {user?.role === "dj" && (
+              {user?.role === "DJ" && (
                 <>
                   <Button variant="outline" className="w-full">
                     Manage Song Queue
