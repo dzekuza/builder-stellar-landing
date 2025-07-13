@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { Layout } from "@/components/Layout";
 import { useAuth } from "@/contexts/AuthContext";
 import { BaristaDashboard } from "@/components/dashboards/BaristaDashboard";
@@ -145,10 +146,12 @@ export default function Dashboard() {
                 Here's what's happening with your events today
               </p>
             </div>
-            <Button className="bg-gradient-to-r from-brand-purple to-brand-blue">
-              <Plus className="w-4 h-4 mr-2" />
-              Create Event
-            </Button>
+            <Link to="/create-event">
+              <Button className="bg-gradient-to-r from-brand-purple to-brand-blue">
+                <Plus className="w-4 h-4 mr-2" />
+                Create Event
+              </Button>
+            </Link>
           </div>
         </div>
 
@@ -316,27 +319,42 @@ export default function Dashboard() {
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <Button variant="outline" className="p-6 h-auto flex-col">
-                <Plus className="w-6 h-6 mb-2" />
-                <span className="font-medium">Create New Event</span>
-                <span className="text-xs text-gray-500">
-                  Set up a new gig with song requests
-                </span>
-              </Button>
-              <Button variant="outline" className="p-6 h-auto flex-col">
-                <QrCode className="w-6 h-6 mb-2" />
-                <span className="font-medium">Generate QR Code</span>
-                <span className="text-xs text-gray-500">
-                  Quick access for song requests
-                </span>
-              </Button>
-              <Button variant="outline" className="p-6 h-auto flex-col">
-                <TrendingUp className="w-6 h-6 mb-2" />
-                <span className="font-medium">View Analytics</span>
-                <span className="text-xs text-gray-500">
-                  Track your performance and earnings
-                </span>
-              </Button>
+              <Link to="/create-event">
+                <Button
+                  variant="outline"
+                  className="p-6 h-auto flex-col w-full"
+                >
+                  <Plus className="w-6 h-6 mb-2" />
+                  <span className="font-medium">Create New Event</span>
+                  <span className="text-xs text-gray-500">
+                    Set up a new gig with song requests
+                  </span>
+                </Button>
+              </Link>
+              <Link to="/qr-generator">
+                <Button
+                  variant="outline"
+                  className="p-6 h-auto flex-col w-full"
+                >
+                  <QrCode className="w-6 h-6 mb-2" />
+                  <span className="font-medium">Generate QR Code</span>
+                  <span className="text-xs text-gray-500">
+                    Quick access for song requests
+                  </span>
+                </Button>
+              </Link>
+              <Link to="/analytics">
+                <Button
+                  variant="outline"
+                  className="p-6 h-auto flex-col w-full"
+                >
+                  <TrendingUp className="w-6 h-6 mb-2" />
+                  <span className="font-medium">View Analytics</span>
+                  <span className="text-xs text-gray-500">
+                    Track your performance and earnings
+                  </span>
+                </Button>
+              </Link>
             </div>
           </CardContent>
         </Card>
