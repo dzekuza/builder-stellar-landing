@@ -1,5 +1,7 @@
 import { Layout } from "@/components/Layout";
 import { useAuth } from "@/contexts/AuthContext";
+import { BaristaDashboard } from "@/components/dashboards/BaristaDashboard";
+import { CompanyDashboard } from "@/components/dashboards/CompanyDashboard";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -25,6 +27,29 @@ import {
 
 export default function Dashboard() {
   const { user } = useAuth();
+
+  if (!user) {
+    return null;
+  }
+
+  // Show role-specific dashboard
+  if (user.role === "barista") {
+    return (
+      <Layout>
+        <BaristaDashboard userName={user.name} />
+      </Layout>
+    );
+  }
+
+  if (user.role === "company") {
+    return (
+      <Layout>
+        <CompanyDashboard userName={user.name} />
+      </Layout>
+    );
+  }
+
+  // Default DJ dashboard (and host for now)
   // Mock data - in real app this would come from API
   const stats = [
     {
@@ -114,14 +139,7 @@ export default function Dashboard() {
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-3xl font-bold text-gray-900">
-                Welcome back, {user?.name}!{" "}
-                {user?.role === "dj"
-                  ? "🎵"
-                  : user?.role === "barista"
-                    ? "☕"
-                    : user?.role === "host"
-                      ? "🎉"
-                      : "🏢"}
+                Welcome back, {user.name}! {user.role === "dj" ? "🎵" : "🎉"}
               </h1>
               <p className="text-gray-600 mt-1">
                 Here's what's happening with your events today
