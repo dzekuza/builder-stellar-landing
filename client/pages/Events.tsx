@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { toast } from "@/hooks/use-toast";
 import { Layout } from "@/components/Layout";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
@@ -216,8 +217,17 @@ export default function Events() {
 
   const handleDeleteEvent = (eventId: string) => {
     // Show confirmation and delete event
-    if (window.confirm("Are you sure you want to delete this event?")) {
+    const eventToDelete = events.find((e) => e.id === eventId);
+    if (
+      window.confirm(
+        `Are you sure you want to delete "${eventToDelete?.name}"? This action cannot be undone.`,
+      )
+    ) {
       setEvents(events.filter((event) => event.id !== eventId));
+      toast({
+        title: "Event Deleted",
+        description: `"${eventToDelete?.name}" has been successfully deleted.`,
+      });
     }
   };
 
