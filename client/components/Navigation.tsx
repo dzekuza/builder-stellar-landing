@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { EventFlowLogo } from "./EventFlowLogo";
+import { ThemeToggle } from "./ThemeToggle";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -103,6 +104,7 @@ export function Navigation() {
 
               {/* User Menu */}
               <div className="hidden md:flex items-center space-x-4">
+                <ThemeToggle />
                 {user?.role && (
                   <Badge className={getRoleColor(user.role)}>
                     {getRoleLabel(user.role)}
@@ -146,6 +148,7 @@ export function Navigation() {
 
               {/* Mobile menu button */}
               <div className="md:hidden flex items-center space-x-2">
+                <ThemeToggle />
                 {user?.role && (
                   <Badge
                     className={getRoleColor(user.role)}
@@ -171,6 +174,7 @@ export function Navigation() {
 
           {!isAuthenticated && (
             <div className="flex items-center space-x-4">
+              <ThemeToggle />
               <Link to="/login">
                 <Button variant="ghost">Sign in</Button>
               </Link>
