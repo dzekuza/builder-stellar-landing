@@ -289,7 +289,7 @@ export function EventsCalendar({
         </div>
 
         {/* Day names header */}
-        <div className="grid grid-cols-7 bg-gray-800">
+        <div className="grid grid-cols-7 bg-gray-50 dark:bg-gray-800">
           {dayNames.map((day) => (
             <div
               key={day}
