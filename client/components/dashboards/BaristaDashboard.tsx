@@ -304,13 +304,13 @@ export function BaristaDashboard({ userName }: { userName: string }) {
               {upcomingEvents.map((event) => (
                 <div
                   key={event.id}
-                  className="p-4 rounded-lg border bg-gray-50/50"
+                  className="p-4 rounded-lg border bg-gradient-to-r from-brand-blue/5 to-brand-purple/5 dark:from-brand-blue/10 dark:to-brand-purple/10 border-brand-blue/20 dark:border-brand-blue/30"
                 >
                   <div className="flex items-center justify-between mb-2">
                     <h3 className="font-medium text-gray-900 dark:text-white">
                       {event.name}
                     </h3>
-                    <Badge className="bg-green-100 text-green-800">
+                    <Badge className="bg-brand-success/10 text-brand-success border-brand-success/20">
                       {event.status}
                     </Badge>
                   </div>
