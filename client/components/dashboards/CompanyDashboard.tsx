@@ -114,35 +114,7 @@ export function CompanyDashboard({ userName }: { userName: string }) {
     },
   ];
 
-  const activeEvents = [
-    {
-      id: 1,
-      name: "Corporate Holiday Party",
-      venue: "Grand Ballroom",
-      date: "Dec 16, 2023",
-      time: "7:00 PM",
-      staff: [
-        { name: "DJ Alex", role: "dj" },
-        { name: "Sarah B.", role: "barista" },
-        { name: "Mike H.", role: "host" },
-      ],
-      revenue: "$2,450",
-      status: "live",
-    },
-    {
-      id: 2,
-      name: "Wedding Reception",
-      venue: "Rose Garden",
-      date: "Dec 17, 2023",
-      time: "6:00 PM",
-      staff: [
-        { name: "Emma DJ", role: "dj" },
-        { name: "Tom C.", role: "barista" },
-      ],
-      revenue: "$1,800",
-      status: "upcoming",
-    },
-  ];
+  const activeEvents = dashboardData?.upcomingEvents?.slice(0, 2) || [];
 
   const teamMembers = [
     {
