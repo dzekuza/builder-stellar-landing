@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -153,14 +154,18 @@ export function CompanyDashboard({ userName }: { userName: string }) {
             </p>
           </div>
           <div className="flex space-x-3">
-            <Button variant="outline">
-              <Users className="w-4 h-4 mr-2" />
-              Invite Team
-            </Button>
-            <Button className="bg-gradient-to-r from-brand-purple to-brand-blue">
-              <Plus className="w-4 h-4 mr-2" />
-              Create Event
-            </Button>
+            <Link to="/team">
+              <Button variant="outline">
+                <Users className="w-4 h-4 mr-2" />
+                Invite Team
+              </Button>
+            </Link>
+            <Link to="/create-event">
+              <Button className="bg-gradient-to-r from-brand-purple to-brand-blue">
+                <Plus className="w-4 h-4 mr-2" />
+                Create Event
+              </Button>
+            </Link>
           </div>
         </div>
       </div>
@@ -349,26 +354,34 @@ export function CompanyDashboard({ userName }: { userName: string }) {
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <Button variant="outline" className="p-6 h-auto flex-col">
-              <Plus className="w-6 h-6 mb-2" />
-              <span className="font-medium">New Event</span>
-              <span className="text-xs text-gray-500">Create and assign</span>
-            </Button>
-            <Button variant="outline" className="p-6 h-auto flex-col">
-              <Users className="w-6 h-6 mb-2" />
-              <span className="font-medium">Invite Team</span>
-              <span className="text-xs text-gray-500">Add new members</span>
-            </Button>
-            <Button variant="outline" className="p-6 h-auto flex-col">
-              <TrendingUp className="w-6 h-6 mb-2" />
-              <span className="font-medium">Analytics</span>
-              <span className="text-xs text-gray-500">Company insights</span>
-            </Button>
-            <Button variant="outline" className="p-6 h-auto flex-col">
-              <Calendar className="w-6 h-6 mb-2" />
-              <span className="font-medium">Schedule</span>
-              <span className="text-xs text-gray-500">Team calendar</span>
-            </Button>
+            <Link to="/create-event">
+              <Button variant="outline" className="p-6 h-auto flex-col w-full">
+                <Plus className="w-6 h-6 mb-2" />
+                <span className="font-medium">New Event</span>
+                <span className="text-xs text-gray-500">Create and assign</span>
+              </Button>
+            </Link>
+            <Link to="/team">
+              <Button variant="outline" className="p-6 h-auto flex-col w-full">
+                <Users className="w-6 h-6 mb-2" />
+                <span className="font-medium">Invite Team</span>
+                <span className="text-xs text-gray-500">Add new members</span>
+              </Button>
+            </Link>
+            <Link to="/analytics">
+              <Button variant="outline" className="p-6 h-auto flex-col w-full">
+                <TrendingUp className="w-6 h-6 mb-2" />
+                <span className="font-medium">Analytics</span>
+                <span className="text-xs text-gray-500">Company insights</span>
+              </Button>
+            </Link>
+            <Link to="/events">
+              <Button variant="outline" className="p-6 h-auto flex-col w-full">
+                <Calendar className="w-6 h-6 mb-2" />
+                <span className="font-medium">Schedule</span>
+                <span className="text-xs text-gray-500">Team calendar</span>
+              </Button>
+            </Link>
           </div>
         </CardContent>
       </Card>
